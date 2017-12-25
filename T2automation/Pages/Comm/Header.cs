@@ -18,6 +18,9 @@ namespace T2automation.Pages.Comm
         [FindsBy(How = How.XPath, Using = ".//*[@id='topNav']/div[2]/div[3]/a")]
         private IWebElement _signOut;
 
+        [FindsBy(How = How.XPath, Using = ".//button[text() = 'Yes']")]
+        private IWebElement _yesBtn;
+
         [FindsBy(How = How.XPath, Using = ".//*[@id='topNav']/div[2]/div[1]/a/span")]
         private IWebElement _language;
 
@@ -31,6 +34,7 @@ namespace T2automation.Pages.Comm
 
         public void Signout(IWebDriver driver) {
             Click(driver, _signOut);
+            Click(driver, _yesBtn);
         }
     }
 }

@@ -70,7 +70,7 @@ namespace T2automation.Pages.Comm
         [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[4]/div[4]/a/label")]
         private IWebElement _documentTemplate;
 
-        [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[5]/a/label")]
+        [FindsBy(How = How.XPath, Using = ".//*[@id='myDocumentsDiv']/a/label")]
         private IWebElement _myMessages;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='folder-0']/a/label")]
@@ -94,7 +94,7 @@ namespace T2automation.Pages.Comm
         [FindsBy(How = How.XPath, Using = ".//*[@id='myDocumentsDiv']/div[7]/a/label")]
         private IWebElement _myMessageReports;
 
-        [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[6]/a/label")]
+        [FindsBy(How = How.XPath, Using = ".//*[@id='organizationDocumentsDiv']/a/label")]
         private IWebElement _departmentMessages;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[7]/a/label")]
@@ -139,6 +139,12 @@ namespace T2automation.Pages.Comm
         [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[11]/a/label")]
         private IWebElement _signOut;
 
+        [FindsBy(How = How.XPath, Using = ".//button[text() = 'Yes']")]
+        private IWebElement _yesBtn;
+
+        [FindsBy(How = How.XPath, Using = ".//button[text() = 'No']")]
+        private IWebElement _noBtn;
+
         public LeftMenu(IWebDriver driver)
         {
             _driver = driver;
@@ -148,6 +154,7 @@ namespace T2automation.Pages.Comm
         public void Signout(IWebDriver driver)
         {
             Click(driver, _signOut);
+            Click(driver, _yesBtn);
         }
 
         public void NavigateToUserManager(IWebDriver driver)
@@ -155,6 +162,12 @@ namespace T2automation.Pages.Comm
             Click(driver, _systemManagementMain);
             Click(driver, _systemManagement);
             Click(driver, _userManager);
+        }
+
+        public void NavigateToInbox(IWebDriver driver)
+        {
+            Click(driver, _myMessages);
+            Click(driver, _inbox);
         }
     }
 }

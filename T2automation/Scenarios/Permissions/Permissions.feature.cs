@@ -65,9 +65,15 @@ namespace T2automation.Scenarios.Permissions
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Permission for internal message creation")]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Internal Message", "true", "arslan", "UserName", "Password", "", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Internal Message", "false", "arslan", "UserName", "Password", "", null)]
-        public virtual void PermissionForInternalMessageCreation(string adminUserName, string adminPassword, string permissionName, string permissionValue, string user, string userName, string password, string hiptest_Uid, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Internal Message", "True", "arslan", "UserName", "Password", "Internal Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Internal Message", "False", "arslan", "UserName", "Password", "Internal Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Encrypted Message", "True", "arslan", "UserName", "Password", "Encrypted internal message", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Encrypted Message", "False", "arslan", "UserName", "Password", "Encrypted internal message", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Incoming Message", "True", "arslan", "UserName", "Password", "Incoming Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Incoming Message", "False", "arslan", "UserName", "Password", "Incoming Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Outing Message", "True", "arslan", "UserName", "Password", "Outgoing Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Outing Message", "False", "arslan", "UserName", "Password", "Outgoing Document", null)]
+        public virtual void PermissionForInternalMessageCreation(string adminUserName, string adminPassword, string permissionName, string permissionValue, string user, string userName, string password, string button, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Permission for internal message creation", exampleTags);
 #line 4
@@ -79,7 +85,7 @@ namespace T2automation.Scenarios.Permissions
 #line 7
     testRunner.And(string.Format("User logs in \"{0}\" \"{1}\"", userName, password), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 8
-    testRunner.Then(string.Format("Visibilty of Internal Message button should be according to permissions  \"{0}\"", permissionValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then(string.Format("\"{0}\" visibility should be \"{1}\"", button, permissionValue), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

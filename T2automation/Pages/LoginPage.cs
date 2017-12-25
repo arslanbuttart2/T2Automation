@@ -6,7 +6,7 @@ using T2automation.Pages.Comm;
 
 namespace T2automation.Pages
 {
-    class LoginPage : BasePage
+    class LoginPage : Header
     {
         private readonly IWebDriver _driver;
 
@@ -22,7 +22,9 @@ namespace T2automation.Pages
         [FindsBy(How = How.Id, Using = "submitBtn")]
         private IWebElement _loginBtn;
 
-        public LoginPage(IWebDriver driver) {
+        public string title = "Login";
+
+        public LoginPage(IWebDriver driver) : base(driver) {
             _driver = driver;
             PageFactory.InitElements(_driver, this);
         }

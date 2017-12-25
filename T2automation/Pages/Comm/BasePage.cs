@@ -4,13 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace T2automation.Pages.Comm
 {
     class BasePage
     {
-        public static TimeSpan WAIT_FOR_SECONDS = TimeSpan.FromSeconds(30);
+        public static TimeSpan WAIT_FOR_SECONDS = TimeSpan.FromSeconds(45);
 
         public static bool ElementIsDisplayed(IWebDriver driver, IWebElement element) {
             WebDriverWait wait = new WebDriverWait(driver, WAIT_FOR_SECONDS);
@@ -55,6 +56,34 @@ namespace T2automation.Pages.Comm
             ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
             return element.Text;
 
+        }
+
+        public bool IsSelected(IWebDriver driver, IWebElement element)
+        {
+            WaitForElement(driver, element);
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+            var results = ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].checked;", element);
+            return element.Selected;
+        }
+
+        public string GetAttribute(IWebDriver driver, IWebElement element, string attribute)
+        {
+            WaitForElement(driver, element);
+            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+            return element.GetAttribute(attribute);
+        }
+
+        public bool IsAt(IWebDriver driver, string title)
+        {
+            return driver.Title.Equals(title);
+        }
+
+        public void CheckLogin(IWebDriver driver) {
+            if (!(IsAt(driver, "Login") || IsAt(driver, "تسجيل الدخول")))
+            {
+                new Header(driver).Signout(driver);
+                Thread.Sleep(2000);
+            }
         }
     }
 }
