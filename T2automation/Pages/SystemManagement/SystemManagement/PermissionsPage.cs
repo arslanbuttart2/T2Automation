@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using T2automation.Pages.Comm;
 
@@ -24,7 +25,7 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
         private IWebElement _sendingPermissions;
 
         [FindsBy(How = How.Id, Using = "btnIncludeException")]
-        private IWebElement _includeList;
+        private IWebElement _systemIncludeList;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/span/a[text() = 'System Settings']/../span[1]")]
         private IWebElement _expandSystemSettings;
@@ -36,13 +37,13 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
         private IWebElement _expandMessagePermission;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li/span")]
-        private IList<IWebElement> _messagePermissionsClass;
+        private IList<IWebElement> _systemMessagePermissionsClass;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li/span/a")]
-        private IList<IWebElement> _messagePermissions;
+        private IList<IWebElement> _systemMessagePermissions;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li/span/span[2]")]
-        private IList<IWebElement> _selectMessagePermissions;
+        private IList<IWebElement> _selectSystemMessagePermissions;
 
         [FindsBy(How = How.XPath, Using = ".//button[text() = 'Ok']")]
         private IWebElement _okBtn;
@@ -60,13 +61,13 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
         private IWebElement _noBtn;
 
         [FindsBy(How = How.Id, Using = "btnExcludeException")]
-        private IWebElement _excludeList;
+        private IWebElement _systemExcludeList;
 
         [FindsBy(How = How.Id, Using = "btnViewResult")]
         private IWebElement _viewSystemPermissionResult;
 
         [FindsBy(How = How.Id, Using = "txtUserRoleSearch")]
-        private IWebElement _search;
+        private IWebElement _systemSearch;
 
         [FindsBy(How = How.Id, Using = "AddbuttondivUserRoleGrid")]
         private IWebElement _addNewBtn;
@@ -77,6 +78,39 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
         [FindsBy(How = How.Id, Using = "btnUopViewResult")]
         private IWebElement _viewDeptPermissionResult;
 
+        [FindsBy(How = How.Id, Using = "txtUserOrganizationRoleSearch")]
+        private IWebElement _deptSearch;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='userDepartmentTable']/tbody/tr/td[1]")]
+        private IList<IWebElement> _deptName;
+
+        [FindsBy(How = How.Id, Using = ".//*[@id='userDepartmentTable']/tbody/tr/td[2]")]
+        private IList<IWebElement> _deptPriSec;
+
+        [FindsBy(How = How.Id, Using = ".//*[@id='userDepartmentTable']/tbody/tr/td[3]")]
+        private IList<IWebElement> _deptRoleName;
+
+        [FindsBy(How = How.Id, Using = ".//*[@id='userDepartmentTable']/tbody/tr/td[4]")]
+        private IList<IWebElement> _deptIncludeList;
+
+        [FindsBy(How = How.Id, Using = ".//*[@id='userDepartmentTable']/tbody/tr/td[5]")]
+        private IList<IWebElement> _deptExcludeList;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/span/span")]
+        private IWebElement _expandDepartmant;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/ul/li/span/a[text() = 'Department Messaging Permissions']/../span")]
+        private IWebElement _expandDeptMessagingPermissions;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li/span")]
+        private IList<IWebElement> _deptMessagePermissionsClass;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li/span/a")]
+        private IList<IWebElement> _deptMessagePermissions;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li/span/span[2]")]
+        private IList<IWebElement> _selectDeptMessagePermissions;
+
         public string title = "Permissions - Ole5.1";
 
         public PermissionsPage(IWebDriver driver) : base(driver)
@@ -85,20 +119,57 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
             PageFactory.InitElements(_driver, this);
         }
 
-        public void SetMessagePermissions(IWebDriver driver, string permissionName, bool value)
+        public void SearchDept(IWebDriver driver, string text) {
+            SendKeys(driver, _deptSearch, text);
+            Thread.Sleep(5000);
+        }
+
+        public void IncludeSystemMessagePermissions(IWebDriver driver, string permissionName, bool value)
         {
-            Click(driver, _includeList);
+            Click(driver, _systemIncludeList);
             Click(driver, _expandMessagePermission);
-            for (int index = 0; index < _messagePermissions.Count - 1; index++) {
-                if (GetText(driver, _messagePermissions.ElementAt(index)).Contains(permissionName)) {
-                    if (GetAttribute(driver, _messagePermissionsClass.ElementAt(index), "class").Contains("selected") != value) {
-                        Click(driver, _selectMessagePermissions.ElementAt(index));
+            for (int index = 0; index < _systemMessagePermissions.Count - 1; index++) {
+                if (GetText(driver, _systemMessagePermissions.ElementAt(index)).Equals(permissionName)) {
+                    if (GetAttribute(driver, _systemMessagePermissionsClass.ElementAt(index), "class").Contains("selected") != value)
+                    {
+                        Click(driver, _selectSystemMessagePermissions.ElementAt(index));
                         Click(driver, _okBtn);
                         Click(driver, _yesBtn);
                         return;
                     }
                     Click(driver, _cancelBtn);
                     return;
+                }
+            }
+        }
+
+        public void IncludeDeptMessagePermissions(IWebDriver driver, string dept, string permissionName, bool value)
+        {
+            Click(driver, _userPermissionOnDept);
+            SearchDept(driver, dept);
+            for (int index = 0; index < _deptName.Count; index++) {
+                if (GetText(driver, _deptName.ElementAt(index)).Equals(dept)) {
+                    var result = _deptIncludeList.Count;
+                    IList<IWebElement> elem = driver.FindElements(By.XPath(".//*[@id='userDepartmentTable']/tbody/tr/td[4]"));
+                    PageFactory.InitElements(driver, this);
+                    Click(driver, _deptIncludeList.ElementAt(index));
+                    Click(driver, _expandDepartmant);
+                    Click(driver, _expandDeptMessagingPermissions);
+                    for (int index1 = 0; index1 < _deptMessagePermissions.Count - 1; index1++)
+                    {
+                        if (GetText(driver, _deptMessagePermissions.ElementAt(index1)).Equals(permissionName))
+                        {
+                            if (GetAttribute(driver, _deptMessagePermissionsClass.ElementAt(index), "class").Contains("selected") != value)
+                            {
+                                Click(driver, _selectDeptMessagePermissions.ElementAt(index));
+                                Click(driver, _okBtn);
+                                Click(driver, _yesBtn);
+                                return;
+                            }
+                            Click(driver, _cancelBtn);
+                            return;
+                        }
+                    }
                 }
             }
         }

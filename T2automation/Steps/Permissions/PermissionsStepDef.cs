@@ -40,15 +40,14 @@ namespace T2automation
             Thread.Sleep(3000);
         }
 
-        [Given("^Admin set permissions for user \"(.*)\" \"(.*)\" \"(.*)\"$"), When("^Admin set permissions for user \"(.*)\" \"(.*)\" \"(.*)\"$"), Then("^Admin set permissions for user \"(.*)\" \"(.*)\" \"(.*)\"$")]
-        public void AdminSetPermissionsForUser(string permissionName, bool value, string user) {
+        [Given("^Admin set system message permissions for user \"(.*)\" \"(.*)\" \"(.*)\"$"), When("^Admin set system message permissions for user \"(.*)\" \"(.*)\" \"(.*)\"$"), Then("^Admin set system message permissions for user \"(.*)\" \"(.*)\" \"(.*)\"$")]
+        public void AdminSetSystemMessagePermissionsForUser(string permissionName, bool value, string user) {
             userManagerPage = new UserManagerPage(driver);
             userManagerPage.NavigateToUserManager(driver);
             Assert.IsTrue(userManagerPage.IsAt(driver, userManagerPage.title));
-            userManagerPage.Search(driver, user);
-            Thread.Sleep(1000);
+
             permissionsPage = userManagerPage.OpenPermissions(driver, user);
-            permissionsPage.SetMessagePermissions(driver, permissionName, value);
+            permissionsPage.IncludeSystemMessagePermissions(driver, permissionName, value);
         }
 
         [Given("^User logs in \"(.*)\" \"(.*)\"$"), When("^User logs in \"(.*)\" \"(.*)\"$"), Then("^User logs in \"(.*)\" \"(.*)\"$")]
@@ -61,13 +60,34 @@ namespace T2automation
             Thread.Sleep(5000);
         }
 
-        [Then(@"""(.*)"" visibility should be ""(.*)""")]
-        public void ThenVisibilityShouldBe(string buttonName, bool value)
+        [Then(@"""(.*)"" visibility should be on My Messages inbox ""(.*)""")]
+        public void ThenVisibilityShouldBeOnMyMessagesInbox(string buttonName, bool value)
         {
             inboxPage = new InboxPage(driver);
             inboxPage.NavigateToInbox(driver);
             Assert.IsTrue(inboxPage.IsAt(driver, inboxPage.title));
             Assert.IsTrue(inboxPage.CheckButtonAvailbility(driver, buttonName, value));
+            if (value)
+            {
+                Assert.IsTrue(inboxPage.CheckButtonClickable(driver, buttonName));
+            }
+        }
+
+        [When(@"Admin set department message permissions for user ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)""")]
+        public void WhenAdminSetDepartmentMessagePermissionsForUser(string permissionName, bool value, string user, string dept)
+        {
+            userManagerPage = new UserManagerPage(driver);
+            userManagerPage.NavigateToUserManager(driver);
+            Assert.IsTrue(userManagerPage.IsAt(driver, userManagerPage.title));
+
+            permissionsPage = userManagerPage.OpenPermissions(driver, user);
+            permissionsPage.IncludeDeptMessagePermissions(driver, readFromConfig.GetDeptName(dept), permissionName, value);
+        }
+
+        [Then(@"""(.*)"" visibility should be ""(.*)"" on Department Messages inbox")]
+        public void ThenVisibilityShouldBeOnDepartmentMessagesInbox(string p0, string p1)
+        {
+            ScenarioContext.Current.Pending();
         }
 
     }

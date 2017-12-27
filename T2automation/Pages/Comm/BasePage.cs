@@ -30,10 +30,17 @@ namespace T2automation.Pages.Comm
             wait.Until(drv => ElementIsDisplayed(driver, element));
         }
 
-        public void Click(IWebDriver driver, IWebElement element) {
-            WaitForElement(driver, element);
-            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
-            element.Click();
+        public bool Click(IWebDriver driver, IWebElement element) {
+            try
+            {
+                WaitForElement(driver, element);
+                //((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+                element.Click();
+                return true;
+            }
+            catch (Exception) {
+                return false;
+            }
         }
 
         public void Submit(IWebDriver driver, IWebElement element)

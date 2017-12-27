@@ -12,6 +12,7 @@ namespace T2automation
     [Binding]
     public sealed class Hooks1
     {
+        /*
         [AfterScenario]
         public static void SignOut()
         {
@@ -19,7 +20,7 @@ namespace T2automation
             IWebDriver driver = driverFactory.GetDriver();
             Header header = new Header(driver);
             header.Signout(driver);
-        }
+        }*/
 
         [AfterTestRun]
         public static void AfterTestRun()

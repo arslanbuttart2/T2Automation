@@ -31,5 +31,9 @@ namespace T2automation.Util
         {
             return ConfigurationSettings.AppSettings[password].ToString();
         }
+
+        public string GetDeptName(string dept) {
+            return ConfigurationSettings.AppSettings[dept].ToString();
+        }
     }
 }

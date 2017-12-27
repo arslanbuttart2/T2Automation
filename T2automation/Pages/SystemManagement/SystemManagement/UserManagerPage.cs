@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenQA.Selenium.Support.UI;
 using T2automation.Pages.Comm;
+using System.Threading;
 
 namespace T2automation.Pages.SystemManagement.SystemManagement
 {
@@ -75,6 +76,8 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
         }
 
         public PermissionsPage OpenPermissions(IWebDriver driver, string user) {
+            Search(driver, user);
+            Thread.Sleep(1000);
             for (int index = 0; index < _userNames.Count - 1; index++) {
                 if (GetText(driver, _userNames.ElementAt(index)).Equals(user)) {
                     Click(driver, _permissionBtn.ElementAt(index));
