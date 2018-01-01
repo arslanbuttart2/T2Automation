@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using T2automation.Pages.SystemManagement.SystemManagement;
 
@@ -70,32 +71,41 @@ namespace T2automation.Pages.Comm
         [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[4]/div[4]/a/label")]
         private IWebElement _documentTemplate;
 
+        [FindsBy(How = How.XPath, Using = ".//*[@id='myDocumentsDiv']")]
+        private IWebElement _myMessagesMenuDiv;
+
         [FindsBy(How = How.XPath, Using = ".//*[@id='myDocumentsDiv']/a/label")]
         private IWebElement _myMessages;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='folder-0']/a/label")]
-        private IWebElement _inbox;
+        private IWebElement _myMessageInbox;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='folder-5']/a/label")]
-        private IWebElement _outbox;
+        private IWebElement _myMessageOutbox;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='folder-2']/a/label")]
-        private IWebElement _drafts;
+        private IWebElement _myMessageDrafts;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='folder-3']/a/label")]
-        private IWebElement _archived;
+        private IWebElement _myMessageArchived;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='folder-4']/a/label")]
-        private IWebElement _deleted;
+        private IWebElement _myMessageDeleted;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='myDocumentsDiv']/div[6]/a/label")]
-        private IWebElement _notifications;
+        private IWebElement _myMessageNotifications;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='myDocumentsDiv']/div[7]/a/label")]
         private IWebElement _myMessageReports;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='organizationDocumentsDiv']/a/label")]
         private IWebElement _departmentMessages;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='organizationDocumentsDivSub3c76399d-2a03-4b67-9459-8a0925263d2e']/a/label")]
+        private IWebElement _qaDept;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='folder-0-3c76399d-2a03-4b67-9459-8a0925263d2e']/a/label")]
+        private IWebElement _qaDeptInbox;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[7]/a/label")]
         private IWebElement _search;
@@ -164,10 +174,32 @@ namespace T2automation.Pages.Comm
             Click(driver, _userManager);
         }
 
-        public void NavigateToInbox(IWebDriver driver)
+        public void NavigateToMyMessage(IWebDriver driver) {
+            if (!GetAttribute(driver, _myMessagesMenuDiv, "class").Contains("active")) {
+                Click(driver, _myMessages);
+            }
+        }
+
+        public void NavigateToMyMessageInbox(IWebDriver driver)
         {
-            Click(driver, _myMessages);
-            Click(driver, _inbox);
+            NavigateToMyMessage(driver);
+            Click(driver, _myMessageInbox);
+            Thread.Sleep(1000);
+        }
+
+        public void NavigateToMyMessageOutbox(IWebDriver driver)
+        {
+            NavigateToMyMessage(driver);
+            Click(driver, _myMessageOutbox);
+            Thread.Sleep(1000);
+        }
+
+        public void NavigateToDeptInbox(IWebDriver driver)
+        {
+            Click(driver, _departmentMessages);
+            Click(driver, _qaDept);
+            Click(driver, _qaDeptInbox);
+            Thread.Sleep(1000);
         }
     }
 }

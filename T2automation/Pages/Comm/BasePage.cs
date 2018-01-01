@@ -53,14 +53,14 @@ namespace T2automation.Pages.Comm
         public void SendKeys(IWebDriver driver, IWebElement element, string value)
         {
             WaitForElement(driver, element);
-            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+            //((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
             element.Clear();
             element.SendKeys(value);
         }
 
         public string GetText(IWebDriver driver, IWebElement element) {
             WaitForElement(driver, element);
-            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+            //((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
             return element.Text;
 
         }
@@ -91,6 +91,11 @@ namespace T2automation.Pages.Comm
                 new Header(driver).Signout(driver);
                 Thread.Sleep(2000);
             }
+        }
+
+        public void DropdownSelectByText(IWebDriver driver, SelectElement select, String text)
+        {
+            select.SelectByText(text);
         }
     }
 }

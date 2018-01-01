@@ -66,24 +66,36 @@
     <Compile Include="Pages\Comm\BasePage.cs" />
     <Compile Include="Pages\Comm\LeftMenu.cs" />
     <Compile Include="Pages\Comm\Header.cs" />
+    <Compile Include="Pages\DeptMessages\InboxPage.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Pages\MyMessages\InboxPage.cs" />
+    <Compile Include="Pages\MyMessages\OutboxPage.cs" />
     <Compile Include="Pages\SystemManagement\SystemManagement\PermissionsPage.cs" />
     <Compile Include="Pages\SystemManagement\SystemManagement\UserManagerPage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scenarios\Messages\SendMessages.feature.cs">
+      <DependentUpon>SendMessages.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Scenarios\Permissions\Permissions.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Permissions.feature</DependentUpon>
     </Compile>
+    <Compile Include="Steps\My Messages\SendMessagesStepDef.cs" />
     <Compile Include="Steps\Permissions\PermissionsStepDef.cs" />
     <Compile Include="Util\ReadFromConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Scenarios\Messages\SendMessages.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SendMessages.feature.cs</LastGenOutput>
+    </None>
     <None Include="Scenarios\Permissions\Permissions.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Permissions.feature.cs</LastGenOutput>

@@ -10,7 +10,6 @@ using T2automation.Init;
 using T2automation.Pages;
 using T2automation.Pages.SystemManagement.SystemManagement;
 using T2automation.Util;
-using T2automation.Pages.MyMessages;
 
 namespace T2automation
 {
@@ -24,7 +23,9 @@ namespace T2automation
         private UserManagerPage userManagerPage;
         private ReadFromConfig readFromConfig;
         private PermissionsPage permissionsPage;
-        private InboxPage inboxPage;
+        private Pages.MyMessages.InboxPage myMessageInboxPage;
+        private Pages.DeptMessages.InboxPage deptMessageInboxPage;
+
 
         [Given("^Admin logged in \"(.*)\" \"(.*)\"$"), When("^Admin logged in \"(.*)\" \"(.*)\"$"), Then("^Admin logged in \"(.*)\" \"(.*)\"$")]
         public void AdminLoggedIn(string username, string password) {
@@ -63,13 +64,13 @@ namespace T2automation
         [Then(@"""(.*)"" visibility should be on My Messages inbox ""(.*)""")]
         public void ThenVisibilityShouldBeOnMyMessagesInbox(string buttonName, bool value)
         {
-            inboxPage = new InboxPage(driver);
-            inboxPage.NavigateToInbox(driver);
-            Assert.IsTrue(inboxPage.IsAt(driver, inboxPage.title));
-            Assert.IsTrue(inboxPage.CheckButtonAvailbility(driver, buttonName, value));
+            myMessageInboxPage = new Pages.MyMessages.InboxPage(driver);
+            myMessageInboxPage.NavigateToMyMessageInbox(driver);
+            Assert.IsTrue(myMessageInboxPage.IsAt(driver, myMessageInboxPage.title));
+            Assert.IsTrue(myMessageInboxPage.CheckButtonAvailbility(driver, buttonName, value));
             if (value)
             {
-                Assert.IsTrue(inboxPage.CheckButtonClickable(driver, buttonName));
+                Assert.IsTrue(myMessageInboxPage.CheckButtonClickable(driver, buttonName));
             }
         }
 
@@ -85,9 +86,16 @@ namespace T2automation
         }
 
         [Then(@"""(.*)"" visibility should be ""(.*)"" on Department Messages inbox")]
-        public void ThenVisibilityShouldBeOnDepartmentMessagesInbox(string p0, string p1)
+        public void ThenVisibilityShouldBeOnDepartmentMessagesInbox(string buttonName, bool value)
         {
-            ScenarioContext.Current.Pending();
+            deptMessageInboxPage = new Pages.DeptMessages.InboxPage(driver);
+            deptMessageInboxPage.NavigateToDeptInbox(driver);
+            Assert.IsTrue(deptMessageInboxPage.IsAt(driver, deptMessageInboxPage.title));
+            Assert.IsTrue(deptMessageInboxPage.CheckButtonAvailbility(driver, buttonName, value));
+            if (value)
+            {
+                Assert.IsTrue(deptMessageInboxPage.CheckButtonClickable(driver, buttonName));
+            }
         }
 
     }

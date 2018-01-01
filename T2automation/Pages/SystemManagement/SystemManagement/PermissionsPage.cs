@@ -90,8 +90,8 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
         [FindsBy(How = How.Id, Using = ".//*[@id='userDepartmentTable']/tbody/tr/td[3]")]
         private IList<IWebElement> _deptRoleName;
 
-        [FindsBy(How = How.Id, Using = ".//*[@id='userDepartmentTable']/tbody/tr/td[4]")]
-        private IList<IWebElement> _deptIncludeList;
+        //[FindsBy(How = How.Id, Using = ".//*[@id='userDepartmentTable']/tbody/tr/td[4]")]
+        //private IList<IWebElement> _deptIncludeList;
 
         [FindsBy(How = How.Id, Using = ".//*[@id='userDepartmentTable']/tbody/tr/td[5]")]
         private IList<IWebElement> _deptExcludeList;
@@ -102,13 +102,13 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
         [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/ul/li/span/a[text() = 'Department Messaging Permissions']/../span")]
         private IWebElement _expandDeptMessagingPermissions;
 
-        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li/span")]
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/ul/li[2]/ul/li/span")]
         private IList<IWebElement> _deptMessagePermissionsClass;
 
-        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li/span/a")]
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/ul/li[2]/ul/li/span/a")]
         private IList<IWebElement> _deptMessagePermissions;
 
-        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li/span/span[2]")]
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/ul/li[2]/ul/li/span/span[2]")]
         private IList<IWebElement> _selectDeptMessagePermissions;
 
         public string title = "Permissions - Ole5.1";
@@ -118,6 +118,12 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
             _driver = driver;
             PageFactory.InitElements(_driver, this);
         }
+
+        private IList<IWebElement> _deptIncludeList(IWebDriver driver)
+        {
+            return driver.FindElements(By.XPath(".//*[@id='userDepartmentTable']/tbody/tr/td[4]"));
+        }
+
 
         public void SearchDept(IWebDriver driver, string text) {
             SendKeys(driver, _deptSearch, text);
@@ -149,19 +155,17 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
             SearchDept(driver, dept);
             for (int index = 0; index < _deptName.Count; index++) {
                 if (GetText(driver, _deptName.ElementAt(index)).Equals(dept)) {
-                    var result = _deptIncludeList.Count;
-                    IList<IWebElement> elem = driver.FindElements(By.XPath(".//*[@id='userDepartmentTable']/tbody/tr/td[4]"));
-                    PageFactory.InitElements(driver, this);
-                    Click(driver, _deptIncludeList.ElementAt(index));
+                    var _includeList = _deptIncludeList(driver);
+                    Click(driver, _includeList.ElementAt(index));
                     Click(driver, _expandDepartmant);
                     Click(driver, _expandDeptMessagingPermissions);
-                    for (int index1 = 0; index1 < _deptMessagePermissions.Count - 1; index1++)
+                    for (int index1 = 0; index1 < _deptMessagePermissions.Count; index1++)
                     {
                         if (GetText(driver, _deptMessagePermissions.ElementAt(index1)).Equals(permissionName))
                         {
-                            if (GetAttribute(driver, _deptMessagePermissionsClass.ElementAt(index), "class").Contains("selected") != value)
+                            if (GetAttribute(driver, _deptMessagePermissionsClass.ElementAt(index1), "class").Contains("selected") != value)
                             {
-                                Click(driver, _selectDeptMessagePermissions.ElementAt(index));
+                                Click(driver, _selectDeptMessagePermissions.ElementAt(index1));
                                 Click(driver, _okBtn);
                                 Click(driver, _yesBtn);
                                 return;
