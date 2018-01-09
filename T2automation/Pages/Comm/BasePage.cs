@@ -39,6 +39,8 @@ namespace T2automation.Pages.Comm
                 return true;
             }
             catch (Exception) {
+                ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+                element.Click();
                 return false;
             }
         }
@@ -95,7 +97,15 @@ namespace T2automation.Pages.Comm
 
         public void DropdownSelectByText(IWebDriver driver, SelectElement select, String text)
         {
-            select.SelectByText(text);
+            try
+            {
+                select.SelectByText(text);
+            }
+            catch (Exception) {
+                Console.WriteLine("Unexpected issue in dropdown select");
+            }
         }
+
+        public Dictionary<string, string> testingDic;
     }
 }

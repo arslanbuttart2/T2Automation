@@ -3,17 +3,22 @@ using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using T2automation.Pages.Comm;
+using T2automation.Util;
+using T2automation.Init;
+using AutoItX3Lib;
 
 namespace T2automation.Pages.MyMessages
 {
     class InboxPage : LeftMenu
     {
         private readonly IWebDriver _driver;
+        private ReadFromConfig readFromConfig;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='head-menu']/div/a/label[text() = ' Internal Document']")]
         private IWebElement _internalDocument;
@@ -34,7 +39,7 @@ namespace T2automation.Pages.MyMessages
         private IWebElement _okBtn;
 
         [FindsBy(How = How.XPath, Using = ".//Button[text() = 'Cancel']")]
-        private IWebElement _cancelBtn;
+        private IList<IWebElement> _cancelBtn;
 
         [FindsBy(How = How.XPath, Using = "//*[@id='btnSelectTo']")]
         private IWebElement _toButton;
@@ -96,18 +101,56 @@ namespace T2automation.Pages.MyMessages
         [FindsBy(How = How.Id, Using = "btnSubmit")]
         private IWebElement _encryptedPasswordOkBtn;
 
+        [FindsBy(How = How.Id, Using = "btnDepartmentTo")]
+        private IWebElement _externalDeptToBtn;
+
+        [FindsBy(How = How.Id, Using = "txtSearchTo3")]
+        private IWebElement _searchDeptName;
+
+        [FindsBy(How = How.Id, Using = "txtSearchExtDepToCode")]
+        private IWebElement _searchDeptCodeName;
+
+        [FindsBy(How = How.Id, Using = "docContentDiv")]
+        private IWebElement _contentTab;
+
+        [FindsBy(How = How.Id, Using = "tabAttache")]
+        private IWebElement _attachmentTab;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='att-head-menu']/div[1]/a/label")]
+        private IWebElement _attacheBtn;
+
         private IWebElement _notificationContent(IWebDriver driver)
         {
             return driver.FindElement(By.Id("not-content0"));
         }
 
         private SelectElement _receiverType(IWebDriver driver) {
-            return new SelectElement(driver.FindElement(By.Id("slctRecieverTypeTemp")));
+            return new SelectElement(driver.FindElement(By.Id("slctRecieverTypeTemp"))); 
         }
 
         private SelectElement _levelSelect(IWebDriver driver)
         {
             return new SelectElement(driver.FindElement(By.Id("slctLevel0Temp")));
+        }
+
+        private SelectElement _deptType(IWebDriver driver)
+        {
+            return new SelectElement(driver.FindElement(By.Id("slcTypeToSearch")));
+        }
+
+        private SelectElement _deliveryType()
+        {
+            return new SelectElement(_driver.FindElement(By.Id("slctDeliveryType")));
+        }
+
+        private IList<IWebElement> _deptRadioBtn(IWebDriver driver)
+        {
+            return driver.FindElements(By.XPath(".//*[@id='externalDepartmentToGrid']/tbody/tr/td[1]/input"));
+        }
+
+        private IList<IWebElement> _deptNames(IWebDriver driver)
+        {
+            return driver.FindElements(By.XPath(".//*[@id='externalDepartmentToGrid']/tbody/tr/td[2]"));
         }
 
         public string title = "Inbox - Ole5.1";
@@ -189,6 +232,11 @@ namespace T2automation.Pages.MyMessages
                 EnterPassword(driver, "P@ssw0rd!@#");
                 Thread.Sleep(2000);
             }
+
+            while (!IsAt(driver, "Create document - Ole5.1")) {
+                Console.WriteLine("Loading Page....");
+                Thread.Sleep(1000);
+            }
             return IsAt(driver, "Create document - Ole5.1");
         }
 
@@ -200,6 +248,7 @@ namespace T2automation.Pages.MyMessages
 
         public void ClickToButton(IWebDriver driver)
         {
+            Thread.Sleep(1000);
             Click(driver, _toButton);
             Thread.Sleep(2000);
         }
@@ -216,6 +265,7 @@ namespace T2automation.Pages.MyMessages
         }
 
         public void SelectToUser(IWebDriver driver, string user) {
+            Thread.Sleep(1000);
             for (int index = 0; index < _selectToName.Count; index++) {
                 if (GetText(driver, _selectToName.ElementAt(index)).Contains(user)) {
                     Click(driver, _selectToCheck.ElementAt(index));
@@ -226,38 +276,52 @@ namespace T2automation.Pages.MyMessages
             }
         }
 
-        public void ClickOkBtn(IWebDriver driver) {
-            Click(driver, _okBtn);
+        public void ClickOkBtn() {
+            Click(_driver, _okBtn);
             Thread.Sleep(1000);
         }
 
-        public void EnterContentBody(IWebDriver driver, string body) {
-            driver.SwitchTo().Frame(_contentBodyIFrame);
-            SendKeys(driver, _contentBody, body);
-            driver.SwitchTo().DefaultContent();
+        public void EnterContentBody(string body) {
+            _driver.SwitchTo().Frame(_contentBodyIFrame);
+            SendKeys(_driver, _contentBody, body);
+            _driver.SwitchTo().DefaultContent();
             Thread.Sleep(1000);
         }
 
-        public void SendMail(IWebDriver driver) {
-            Click(driver, _sendBtn);
-            Thread.Sleep(1000);
-        }
-
-        public bool OpenMail(IWebDriver driver, string subject)
-        {
-            foreach (IWebElement elem in _subjectList)
+        public void SendMail(string subject, string contentBody, bool checkPopup = false, int multipleAttachementNo = 1, string multipleAttachmentType = "") {
+            ComposeMail(subject, contentBody);
+            if (!multipleAttachmentType.Equals(""))
             {
-                if (GetText(driver, elem).Equals(subject))
+                if (multipleAttachmentType.Contains(","))
                 {
-                    Click(driver, elem);
-                    Thread.Sleep(1000);
-                    return true;
+                    string[] types = multipleAttachmentType.Split(',');
+                    foreach (string type in types)
+                    {
+                        AddAttachments(type);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < multipleAttachementNo; i++)
+                    {
+                        AddAttachments(multipleAttachmentType);
+                    }
                 }
             }
-            return false;
+            Click(_driver, _sendBtn);
+            Thread.Sleep(2000);
+            if (checkPopup) {
+                foreach (IWebElement cancelBtn in _cancelBtn) {
+                    if (cancelBtn.Displayed) {
+                        Click(_driver, cancelBtn);
+                        break;
+                    }
+                }
+            }
+            WaitTillMailSent();
         }
 
-        public bool OpenMail(IWebDriver driver, string subject, string encryptPass)
+        public bool OpenMail(IWebDriver driver, string subject, string encryptPass = "")
         {
             foreach (IWebElement elem in _subjectList)
             {
@@ -265,9 +329,11 @@ namespace T2automation.Pages.MyMessages
                 {
                     Click(driver, elem);
                     Thread.Sleep(1000);
-                    EncryptedPassword = encryptPass;
-                    Click(driver, _encryptedPasswordOkBtn);
-                    Thread.Sleep(5000);
+                    if (!encryptPass.Equals("")) {
+                        EncryptedPassword = encryptPass;
+                        Click(driver, _encryptedPasswordOkBtn);
+                        Thread.Sleep(5000);
+                    }
                     return true;
                 }
             }
@@ -307,15 +373,84 @@ namespace T2automation.Pages.MyMessages
             return false;
         }
 
-        public void WaitTillMailSent(IWebDriver driver)
+        public void WaitTillMailSent()
         {
             try {
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
-                wait.Until(drv => ElementIsDisplayed(driver, _notificationContent(driver)));
+                WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(60));
+                wait.Until(drv => ElementIsDisplayed(_driver, _notificationContent(_driver)));
             }
             catch (Exception) {
                 Console.WriteLine("Notification on sending email does not appear");
             }
+        }
+
+        public int SearchDept(string deptName = "", string deptCode = "", string type = "") {
+            if (!deptName.Equals(""))
+            {
+                SendKeys(_driver, _searchDeptName, deptName);
+            }
+            if (!deptCode.Equals(""))
+            {
+                SendKeys(_driver, _searchDeptCodeName, deptName);
+            }
+            if (!type.Equals(""))
+            {
+                DropdownSelectByText(_driver, _deptType(_driver), type);
+            }
+            Thread.Sleep(5000);
+            var deptNames = _deptNames(_driver);
+            for (int index = 0; index < deptNames.Count; index++) {
+                if (GetText(_driver, deptNames.ElementAt(index)).Equals(deptName)) {
+                    return index;
+                }
+            }
+            return -1;
+        }
+
+        public bool SelectExternalDeptTo(string deptName = "", string deptCode = "", string type = "") {
+            Thread.Sleep(5000);
+            Click(_driver, _externalDeptToBtn);
+            int index = SearchDept(deptName, deptCode, type);
+            if (index != -1) {
+                Thread.Sleep(5000);
+                Click(_driver, _deptRadioBtn(_driver).ElementAt(index));
+                Thread.Sleep(2000);
+                Click(_driver, _okBtn);
+                Thread.Sleep(2000);
+                return true;
+            }
+            Click(_driver, _okBtn);
+            return false;
+        }
+
+        public void ComposeMail(string subject, string contentBody, string multipleAttachementNo = "No", string multipleAttachmentType = "png") {
+            Subject = subject;
+            EnterContentBody(contentBody);
+        }
+
+        public void SetProperties(string deliveryType = "")
+        {
+            DropdownSelectByText(_driver, _deliveryType(), deliveryType);
+        }
+
+        public void SendOutgoingMessage(string subject, string contentBody, string deliveryType = "", string deptName = "", string deptCode = "", string type = "") {
+            NavigateToMyMessageInbox(_driver);
+            CheckButtonClickable(_driver, "Outgoing Document");
+            SelectExternalDeptTo(deptName, deptCode, type);
+            SetProperties(deliveryType);
+            Click(_driver, _contentTab);
+            SendMail(subject, contentBody, checkPopup: true);
+        }
+
+        public void AddAttachments(string multipleAttachmentType) {
+            Click(_driver, _attachmentTab);
+            Click(_driver, _attacheBtn);
+            AutoItX3 autoIt = new AutoItX3();
+            autoIt.WinActivate("Open");
+            readFromConfig = new ReadFromConfig();
+            var filePath = readFromConfig.GetValue("AttachementFolder") + multipleAttachmentType;
+            autoIt.Send(filePath);
+            autoIt.Send("{ENTER}");
         }
     }
 }

@@ -42,6 +42,12 @@ namespace T2automation.Pages.MyMessages
         [FindsBy(How = How.Id, Using = "btnSubmit")]
         private IWebElement _encryptedPasswordOkBtn;
 
+        [FindsBy(How = How.Id, Using = "tabAttache")]
+        private IWebElement _attachmentTab;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='files-parent']/div/div[2]")]
+        private IList<IWebElement> _attachments;
+
         public string EncryptedPassword
         {
             set
@@ -52,12 +58,13 @@ namespace T2automation.Pages.MyMessages
 
         public string title = "Outbox - Ole5.1";
 
-        public OutboxPage(IWebDriver driver) : base(driver) {
+        public OutboxPage(IWebDriver driver) : base(driver)
+        {
             _driver = driver;
             PageFactory.InitElements(_driver, this);
         }
 
-        public bool OpenMail(IWebDriver driver, string subject) {
+        /*public bool OpenMail(IWebDriver driver, string subject) {
             foreach (IWebElement elem in _subjectList){
                 if (GetText(driver, elem).Equals(subject)) {
                     Click(driver, elem);
@@ -65,9 +72,9 @@ namespace T2automation.Pages.MyMessages
                 }
             }
             return false;
-        }
+        }*/
 
-        public bool OpenMail(IWebDriver driver, string subject, string encryptPass)
+        public bool OpenMail(IWebDriver driver, string subject, string encryptPass = "")
         {
             foreach (IWebElement elem in _subjectList)
             {
@@ -75,16 +82,20 @@ namespace T2automation.Pages.MyMessages
                 {
                     Click(driver, elem);
                     Thread.Sleep(1000);
-                    EncryptedPassword = encryptPass;
-                    Click(driver, _encryptedPasswordOkBtn);
-                    Thread.Sleep(5000);
+                    if (!encryptPass.Equals(""))
+                    {
+                        EncryptedPassword = encryptPass;
+                        Click(driver, _encryptedPasswordOkBtn);
+                        Thread.Sleep(5000);
+                    }
                     return true;
                 }
             }
             return false;
         }
 
-        public bool ValidateTo(IWebDriver driver, string to) {
+        public bool ValidateTo(IWebDriver driver, string to)
+        {
             return GetText(driver, _mailTo).Contains(to);
         }
 
@@ -98,9 +109,28 @@ namespace T2automation.Pages.MyMessages
             return GetText(driver, _contentBody).Equals(contentBody);
         }
 
-        public bool ValidateMail(IWebDriver driver, string to, string subject, string body) {
-            if (OpenMail(driver, subject)) {
-                return (ValidateTo(driver, to) && ValidateSubject(driver, subject) && ValidateContentBody(driver, body));
+        public bool ValidateAttachments(IWebDriver driver, int attachmentNo, string attachment)
+        {
+            Click(driver, _attachmentTab);
+            if (_attachments.Count == attachmentNo)
+            {
+                for (int index = 0; index < attachmentNo; index++)
+                {
+                    if (!attachment.Contains(GetAttribute(driver, _attachments.ElementAt(index), "title")))
+                   {
+                        return false;
+                   }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public bool ValidateMail(IWebDriver driver, string to, string subject, string body, int attachmentNo = 1, string attachment = null)
+        {
+            if (OpenMail(driver, subject))
+            {
+                return (ValidateTo(driver, to) && ValidateSubject(driver, subject) && ValidateContentBody(driver, body) && ValidateAttachments(driver, attachmentNo, attachment));
             }
             return false;
         }
@@ -116,3 +146,4 @@ namespace T2automation.Pages.MyMessages
 
     }
 }
+

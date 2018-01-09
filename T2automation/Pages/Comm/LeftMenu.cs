@@ -98,14 +98,26 @@ namespace T2automation.Pages.Comm
         [FindsBy(How = How.XPath, Using = ".//*[@id='myDocumentsDiv']/div[7]/a/label")]
         private IWebElement _myMessageReports;
 
+        [FindsBy(How = How.XPath, Using = ".//*[@id='organizationDocumentsDiv']")]
+        private IWebElement _departmentMessagesMenuDiv;
+
         [FindsBy(How = How.XPath, Using = ".//*[@id='organizationDocumentsDiv']/a/label")]
         private IWebElement _departmentMessages;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='organizationDocumentsDivSub3c76399d-2a03-4b67-9459-8a0925263d2e']")]
+        private IWebElement _qaDeptMenuDiv;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='organizationDocumentsDivSub3c76399d-2a03-4b67-9459-8a0925263d2e']/a/label")]
         private IWebElement _qaDept;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='folder-0-3c76399d-2a03-4b67-9459-8a0925263d2e']/a/label")]
         private IWebElement _qaDeptInbox;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='folder-3c76399d-2a03-4b67-9459-8a0925263d2e']/a/label")]
+        private IWebElement _qaDeptOutbox;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='organizationDocumentsDiv']/div/div[1]/a/label")]
+        private IWebElement _inboxMessageWithRoot;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[7]/a/label")]
         private IWebElement _search;
@@ -155,6 +167,10 @@ namespace T2automation.Pages.Comm
         [FindsBy(How = How.XPath, Using = ".//button[text() = 'No']")]
         private IWebElement _noBtn;
 
+        public IList<IWebElement> _deptNames() {
+            return _driver.FindElements(By.XPath(".//*[@id='organizationDocumentsDiv']/div/a/label"));
+        }
+
         public LeftMenu(IWebDriver driver)
         {
             _driver = driver;
@@ -194,11 +210,43 @@ namespace T2automation.Pages.Comm
             Thread.Sleep(1000);
         }
 
-        public void NavigateToDeptInbox(IWebDriver driver)
+        public void NavigateToQADeptInbox(IWebDriver driver)
         {
-            Click(driver, _departmentMessages);
+            if (!GetAttribute(driver, _departmentMessagesMenuDiv, "class").Contains("active"))
+            {
+                Click(driver, _departmentMessages);
+            }
             Click(driver, _qaDept);
             Click(driver, _qaDeptInbox);
+            Thread.Sleep(1000);
+        }
+
+        public void NavigateToQADeptOutbox(IWebDriver driver)
+        {
+            if (!GetAttribute(driver, _departmentMessagesMenuDiv, "class").Contains("active"))
+            {
+                Click(driver, _departmentMessages);
+            }
+
+            if (!GetAttribute(driver, _qaDeptMenuDiv, "class").Contains("active"))
+            {
+                Click(driver, _qaDept);
+            }
+            Click(driver, _qaDeptOutbox);
+            Thread.Sleep(1000);
+        }
+
+        public void NavigateToMessageRoot(IWebDriver driver, string CommDept)
+        {
+            Click(driver, _departmentMessages);
+            var deptList = _deptNames();
+            foreach (IWebElement dept in deptList) {
+                if (GetText(driver, dept).Equals(CommDept))
+                {
+                    Click(driver, dept);
+                }
+            }
+            Click(driver, _inboxMessageWithRoot);
             Thread.Sleep(1000);
         }
     }

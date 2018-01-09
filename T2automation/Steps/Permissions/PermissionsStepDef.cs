@@ -89,7 +89,7 @@ namespace T2automation
         public void ThenVisibilityShouldBeOnDepartmentMessagesInbox(string buttonName, bool value)
         {
             deptMessageInboxPage = new Pages.DeptMessages.InboxPage(driver);
-            deptMessageInboxPage.NavigateToDeptInbox(driver);
+            deptMessageInboxPage.NavigateToQADeptInbox(driver);
             Assert.IsTrue(deptMessageInboxPage.IsAt(driver, deptMessageInboxPage.title));
             Assert.IsTrue(deptMessageInboxPage.CheckButtonAvailbility(driver, buttonName, value));
             if (value)
