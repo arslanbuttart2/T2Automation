@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
@@ -39,9 +40,25 @@ namespace T2automation.Pages.Comm
                 return true;
             }
             catch (Exception) {
-                ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
-                element.Click();
-                return false;
+                try
+                {
+                    Thread.Sleep(3000);
+                    element.Click();
+                    return true;
+                }
+                catch (Exception) {
+                    try
+                    {
+                        ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView();", element);
+                        element.Click();
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].click();", element);
+                        return false;
+                    }
+                }
             }
         }
 
@@ -58,6 +75,7 @@ namespace T2automation.Pages.Comm
             //((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
             element.Clear();
             element.SendKeys(value);
+            //element.SendKeys(Keys.Tab);
         }
 
         public string GetText(IWebDriver driver, IWebElement element) {
@@ -78,7 +96,7 @@ namespace T2automation.Pages.Comm
         public string GetAttribute(IWebDriver driver, IWebElement element, string attribute)
         {
             WaitForElement(driver, element);
-            ((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
+            //((IJavaScriptExecutor)driver).ExecuteScript("arguments[0].scrollIntoView(true);", element);
             return element.GetAttribute(attribute);
         }
 

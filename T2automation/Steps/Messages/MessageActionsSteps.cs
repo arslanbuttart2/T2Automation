@@ -24,40 +24,40 @@ namespace T2automation.Steps.Messages
         private ReadFromConfig readFromConfig;
         private PermissionsPage permissionsPage;
         private LoginPage loginPage;
-        private Pages.MyMessages.InboxPage myMessageInboxPage;
+        private Pages.MyMessages.InboxPage inboxPage;
         private Pages.DeptMessages.InboxPage deptMessageInboxPage;
 
         [When(@"user sends an internal message with attachment to ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)""")]
         public void WhenUserSendsAnInternalMessageWithAttachmentTo(string level, string receiverType, string to, string subject, string content, int multipleAttachementNo, string multipleAttachmentType)
         {
             driver = driverFactory.GetDriver();
-            myMessageInboxPage = new InboxPage(driver);
-            myMessageInboxPage.NavigateToMyMessageInbox(driver);
-            myMessageInboxPage.CheckButtonClickable(driver, "Internal Document");
-            myMessageInboxPage.ClickToButton(driver);
-            myMessageInboxPage.SelectLevel(driver, level);
-            myMessageInboxPage.SelectReceiverType(driver, receiverType);
-            myMessageInboxPage.SearchNameCode = to;
-            myMessageInboxPage.SelectToUser(driver, to);
-            myMessageInboxPage.ClickOkBtn();
-            myMessageInboxPage.SendMail(subject, content, multipleAttachementNo: multipleAttachementNo, multipleAttachmentType: multipleAttachmentType);
+            inboxPage = new InboxPage(driver);
+            inboxPage.NavigateToMyMessageInbox(driver);
+            inboxPage.CheckButtonClickable(driver, "Internal Document");
+            inboxPage.ClickToButton(driver);
+            inboxPage.SelectLevel(driver, level);
+            inboxPage.SelectReceiverType(driver, receiverType);
+            inboxPage.SearchNameCode = to;
+            inboxPage.SelectToUser(driver, to);
+            inboxPage.ClickOkBtn();
+            inboxPage.SendMail(subject, content, multipleAttachementNo: multipleAttachementNo, multipleAttachmentType: multipleAttachmentType);
         }
 
         [When(@"user sends an departmental internal message with attachment to ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)""")]
         public void WhenUserSendsAnDepartmentalInternalMessageWithAttachmentTo(string level, string receiverType, string to, string subject, string content, int multipleAttachementNo, string multipleAttachmentType, string dept)
         {
             driver = driverFactory.GetDriver();
-            myMessageInboxPage = new InboxPage(driver);
+            inboxPage = new InboxPage(driver);
             deptMessageInboxPage = new Pages.DeptMessages.InboxPage(driver);
             deptMessageInboxPage.NavigateToQADeptInbox(driver);
             deptMessageInboxPage.CheckButtonClickable(driver, "Internal Document");
-            myMessageInboxPage.ClickToButton(driver);
-            myMessageInboxPage.SelectLevel(driver, level);
-            myMessageInboxPage.SelectReceiverType(driver, receiverType);
-            myMessageInboxPage.SearchNameCode = to;
-            myMessageInboxPage.SelectToUser(driver, to);
-            myMessageInboxPage.ClickOkBtn();
-            myMessageInboxPage.SendMail(subject, content, multipleAttachementNo:multipleAttachementNo, multipleAttachmentType: multipleAttachmentType);
+            inboxPage.ClickToButton(driver);
+            inboxPage.SelectLevel(driver, level);
+            inboxPage.SelectReceiverType(driver, receiverType);
+            inboxPage.SearchNameCode = to;
+            inboxPage.SelectToUser(driver, to);
+            inboxPage.ClickOkBtn();
+            inboxPage.SendMail(subject, content, multipleAttachementNo:multipleAttachementNo, multipleAttachmentType: multipleAttachmentType);
         }
 
         [Then(@"mail should appear in department message out box ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)""")]
@@ -68,5 +68,210 @@ namespace T2automation.Steps.Messages
             outboxPage.NavigateToQADeptOutbox(driver);
             Assert.IsTrue(outboxPage.ValidateMail(driver, to, subject, content, attachmentNo: attachmentNo, attachment: attachmentType));
         }
+
+        [When(@"user attach attachment to internal message ""(.*)"" ""(.*)""")]
+        public void WhenUserAttachAnAttachment(string attachmentType, int attachmentNo)
+        {
+            driver = driverFactory.GetDriver();
+            inboxPage = new InboxPage(driver);
+            inboxPage.NavigateToMyMessageInbox(driver);
+            inboxPage.CheckButtonClickable(driver, "Internal Document");
+            inboxPage.AddAttachments(attachmentType, attachmentNo);
+
+        }
+
+        [When(@"user attach attachment to department internal message ""(.*)"" ""(.*)""")]
+        public void WhenUserAttachAnAttachmentToDept(string attachmentType, int attachmentNo)
+        {
+            driver = driverFactory.GetDriver();
+            inboxPage = new InboxPage(driver);
+            deptMessageInboxPage = new Pages.DeptMessages.InboxPage(driver);
+            deptMessageInboxPage.NavigateToQADeptInbox(driver);
+            deptMessageInboxPage.CheckButtonClickable(driver, "Internal Document");
+            inboxPage.AddAttachments(attachmentType, attachmentNo);
+        }
+
+        [When(@"user delete the attachment ""(.*)"" ""(.*)""")]
+        public void WhenUserDeleteTheAttachment(string deleteAttachmentTypes, int deleteAttachmentNo)
+        {
+            inboxPage.DeleteAttachments(deleteAttachmentTypes, deleteAttachmentNo);
+        }
+
+        [Then(@"attachment should not appear ""(.*)"" ""(.*)"" ""(.*)""")]
+        public void ThenAttachmentShouldNotAppear(string attachmentType, int attachmentNo, int deleteAttachmentNo)
+        {
+            Assert.IsTrue(inboxPage.ValidateAttachments(driver, attachmentNo, attachmentType, deleteAttachmentNo: deleteAttachmentNo));
+        }
+
+        [When(@"user download the attachment from inbox mail ""(.*)"" ""(.*)"" ""(.*)""")]
+        public void GivenUserDownloadTheAttachmentFromInboxMail(string subject, string downloadFileName, int downloadFileNo)
+        {
+            driver = driverFactory.GetDriver();
+            inboxPage = new InboxPage(driver);
+            inboxPage.NavigateToMyMessageInbox(driver);
+            inboxPage.DownloadFile(subject, downloadFileName, downloadFileNo);
+        }
+
+        [When(@"user download the attachment from department inbox mail ""(.*)"" ""(.*)"" ""(.*)""")]
+        public void GivenUserDownloadTheAttachmentFromDepartmentInboxMail(string subject, string downloadFileName, int downloadFileNo)
+        {
+            driver = driverFactory.GetDriver();
+            inboxPage = new InboxPage(driver);
+            inboxPage.NavigateToQADeptInbox(driver);
+            inboxPage.DownloadFile(subject, downloadFileName, downloadFileNo);
+        }
+
+        [Then(@"the file should appear in downloads ""(.*)"" ""(.*)""")]
+        public void ThenTheFileShouldAppearInDownloads(string downloadFileName, int downloadFileNo)
+        {
+            Assert.IsTrue(new GetDownloadFiles().ValidateFilesNos(downloadFileNo));
+        }
+
+        [When(@"user sends an internal message with properties with attachments ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)""")]
+        public void WhenUserSendsAnInternalMessageWithProperties(string level, string receiverType, string to, string subject, string content, string securityLevel, int attachmentNo, string attachmentType)
+        {
+            driver = driverFactory.GetDriver();
+            inboxPage = new InboxPage(driver);
+            readFromConfig = new ReadFromConfig();
+            inboxPage.NavigateToMyMessageInbox(driver);
+            inboxPage.CheckButtonClickable(driver, "Internal Document");
+            inboxPage.ClickToButton(driver);
+            inboxPage.SelectLevel(driver, level);
+            inboxPage.SelectReceiverType(driver, receiverType);
+            inboxPage.SearchNameCode = readFromConfig.GetValue(to);
+            inboxPage.SelectToUser(driver, readFromConfig.GetValue(to));
+            inboxPage.ClickOkBtn();
+            inboxPage.SendMail(subject, content, multipleAttachementNo: attachmentNo, multipleAttachmentType: attachmentType, securityLevel: readFromConfig.GetValue(securityLevel));
+        }
+
+        [When(@"user sends an deparment internal message with properties with attachments ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)"" ""(.*)""")]
+        public void WhenUserSendsAnDeparmentInternalMessageWithPropertiesWithAttachments(string level, string receiverType, string to, string subject, string content, string securityLevel, int attachmentNo, string attachmentType, string dept)
+        {
+            driver = driverFactory.GetDriver();
+            inboxPage = new InboxPage(driver);
+            deptMessageInboxPage = new Pages.DeptMessages.InboxPage(driver);
+            readFromConfig = new ReadFromConfig();
+            deptMessageInboxPage.NavigateToQADeptInbox(driver);
+            inboxPage.CheckButtonClickable(driver, "Internal Document");
+            inboxPage.ClickToButton(driver);
+            inboxPage.SelectLevel(driver, level);
+            inboxPage.SelectReceiverType(driver, receiverType);
+            inboxPage.SearchNameCode = readFromConfig.GetValue(to);
+            inboxPage.SelectToUser(driver, readFromConfig.GetValue(to));
+            inboxPage.ClickOkBtn();
+            inboxPage.SendMail(subject, content, multipleAttachementNo: attachmentNo, multipleAttachmentType: attachmentType, securityLevel: readFromConfig.GetValue(securityLevel));
+        }
+
+        [When(@"user go to my messages Internal Document")]
+        public void WhenUserGoToInternalDocument()
+        {
+            driver = driverFactory.GetDriver();
+            inboxPage = new InboxPage(driver);
+            readFromConfig = new ReadFromConfig();
+            inboxPage.NavigateToMyMessageInbox(driver);
+            inboxPage.CheckButtonClickable(driver, "Internal Document");
+        }
+
+        [When(@"search ""(.*)"" ""(.*)"" ""(.*)""")]
+        public void WhenSearch(string to, string level, string receiverType)
+        {
+            readFromConfig = new ReadFromConfig();
+            inboxPage.ClickToButton(driver);
+            inboxPage.SelectLevel(driver, readFromConfig.GetValue(level));
+            inboxPage.SelectReceiverType(driver, receiverType);
+            inboxPage.SearchNameCode = readFromConfig.GetValue(to);
+            inboxPage.SelectToUser(driver, readFromConfig.GetValue(to));
+            inboxPage.ClickOkBtn();
+        }
+
+        [When(@"user compose mail ""(.*)"" ""(.*)""")]
+        public void WhenUserComposeMail(string subject, string content)
+        {
+            inboxPage.ComposeMail(subject, content);
+        }
+
+        [When(@"user attach attachments (.*) ""(.*)""")]
+        public void WhenUserAttachAttachments(int attachmentNo, string attachmentTypes)
+        {
+            inboxPage.AddAttachments(attachmentTypes, attachmentNo);
+        }
+
+        [When(@"user send the email")]
+        public void WhenUserSendTheEmail()
+        {
+            inboxPage.clickOnSendBtn();
+            Assert.IsTrue(inboxPage.WaitTillMailSent(), "Unable to send mail");
+        }
+
+        [When(@"user go to my messages Incomming Document")]
+        public void WhenUserGoToMyMessagesIncommingDocument()
+        {
+            driver = driverFactory.GetDriver();
+            inboxPage = new InboxPage(driver);
+            inboxPage.NavigateToMyMessageInbox(driver);
+            inboxPage.CheckButtonClickable(driver, "Incoming Document");
+        }
+
+        [When(@"select the external department ""(.*)""")]
+        public void WhenSelectTheExternalDepartment(string to)
+        {
+            readFromConfig = new ReadFromConfig();
+            inboxPage.SelectExternalDeptTo(deptName: readFromConfig.GetValue(to));
+        }
+
+        [When(@"user send the email and click on Cancel button")]
+        public void WhenUserSendTheEmailAndClickOnCancelButton()
+        {
+            inboxPage.clickOnSendBtn(true);
+            Assert.IsTrue(inboxPage.WaitTillMailSent(), "Unable to send mail");
+        }
+
+        [When(@"user enters incomming message no ""(.*)"" and incomming message Gregorian date ""(.*)""")]
+        public void WhenUserEntersIncommingMessageNoAndIncommingMessageGregorianDate(string messageNo, string messageGreorianDate)
+        {
+            inboxPage.SetProperties(messageNo: messageNo, messageGreorianDate: messageGreorianDate);
+        }
+
+        [When(@"user go to my messages Outgoing Document")]
+        public void WhenUserGoToMyMessagesOutgoingDocument()
+        {
+            driver = driverFactory.GetDriver();
+            inboxPage = new InboxPage(driver);
+            inboxPage.NavigateToMyMessageInbox(driver);
+            inboxPage.CheckButtonClickable(driver, "Outgoing Document");
+        }
+
+        [When(@"select delivery type ""(.*)""")]
+        public void WhenSelectDeliveryType(string deliveryType)
+        {
+            inboxPage.SetProperties(deliveryType: deliveryType);
+        }
+
+        [When(@"user select connected document with subject ""(.*)""")]
+        public void WhenUserSelectConnectedDocumentWithSubject(string subject)
+        {
+            inboxPage.SelectConnectedDoc(subject);
+        }
+
+        [When(@"user opens inbox email with subject ""(.*)""")]
+        public void WhenUserOpensInboxEmailWithSubject(string subject)
+        {
+            driver = driverFactory.GetDriver();
+            inboxPage = new InboxPage(driver);
+            inboxPage.OpenMail(driver, subject);
+        }
+
+        [Then(@"the visibilty of button ""(.*)"" should be ""(.*)"" on connected doc tab")]
+        public void ThenTheVisibiltyOfButtonShouldBeOnConnectedDocTab(string buttonName, bool value)
+        {
+            Assert.IsTrue(inboxPage.CheckVisibiltyOnConnectedDoc(buttonName, value), buttonName + " should not be visible");
+        }
+
+        [Then(@"the visibilty of tab ""(.*)"" should be ""(.*)"" on connected doc tab")]
+        public void ThenTheVisibiltyOfTabShouldBeOnConnectedDocTab(string tab, bool value)
+        {
+            Assert.IsTrue(inboxPage.CheckVisibiltyOfTab(tab, value), tab + " should not be visible");
+        }
+
     }
 }

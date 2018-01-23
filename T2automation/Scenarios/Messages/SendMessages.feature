@@ -3,7 +3,7 @@
 Scenario Outline: Sending internal message - personal mail
 	Given Admin logged in "<adminUserName>" "<adminPassword>"
 	When user sends an internal message to "<level>" "<receiverType>" "<to>" "<subject>" "<content>"
-	Then mail should appear in my message out box "<to>" "<subject>" "<content>" ""
+	Then mail should appear in my message out box "<to>" "<subject>" "<content>" "" ""
 	When User logs in "<userName>" "<password>"
 	Then mail should appear in the inbox "<to>" "<subject>" "<content>"
 	
@@ -25,7 +25,7 @@ Scenario Outline: Sending encrypted message - personal mail
 Scenario Outline: Sending incoming message - personal mail
 	Given Admin logged in "<adminUserName>" "<adminPassword>"
 	When user sends an incoming message to "<level>" "<receiverType>" "<to>" "<subject>" "<content>"
-	Then mail should appear in my message out box "<to>" "<subject>" "<content>"
+	Then mail should appear in my message out box "<to>" "<subject>" "<content>" "" ""
 	When User logs in "<userName>" "<password>"
 	Then mail should appear in the inbox "<to>" "<subject>" "<content>"
 	
@@ -36,7 +36,7 @@ Scenario Outline: Sending incoming message - personal mail
 Scenario Outline: Sending outgoing message - personal mail
 	Given Admin logged in "<adminUserName>" "<adminPassword>"
 	When user sends an outgoing message to "<name>" "<subject>" "<content>" "<deliveryType>"
-	Then mail should appear in my message out box "<CommDept>" "<subject>" "<content>" ""
+	Then mail should appear in my message out box "<CommDept>" "<subject>" "<content>" "" ""
 	Then mail should appear in Department Message with Root "<CommDept>" "<subject>" "<content>"
 	
 	Examples:

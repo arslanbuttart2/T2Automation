@@ -17,8 +17,14 @@ namespace T2automation.Pages.Comm
         [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[2]/a/label")]
         private IWebElement _home;
 
+        [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[3]")]
+        private IWebElement _systemManagementMainDiv;
+
         [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[3]/a/label")]
         private IWebElement _systemManagementMain;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[3]/div[1]")]
+        private IWebElement _systemManagementDiv;
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='sNav']/div[3]/div[1]/a/label")]
         private IWebElement _systemManagement;
@@ -185,8 +191,11 @@ namespace T2automation.Pages.Comm
 
         public void NavigateToUserManager(IWebDriver driver)
         {
-            Click(driver, _systemManagementMain);
-            Click(driver, _systemManagement);
+            if (!GetAttribute(driver, _systemManagementMainDiv, "class").Contains("active"))
+            {
+                Click(driver, _systemManagementMain);
+                Click(driver, _systemManagement);
+            }
             Click(driver, _userManager);
         }
 

@@ -35,10 +35,7 @@ namespace T2automation.Pages.MyMessages
         [FindsBy(How = How.XPath, Using = ".//div[@class = 'ajs-content']/input")]
         private IWebElement _passwordInput;
 
-        [FindsBy(How = How.XPath, Using = ".//Button[text() = 'Ok']")]
-        private IWebElement _okBtn;
-
-        [FindsBy(How = How.XPath, Using = ".//Button[text() = 'Cancel']")]
+        [FindsBy(How = How.XPath, Using = ".//button[text() = 'Cancel']")]
         private IList<IWebElement> _cancelBtn;
 
         [FindsBy(How = How.XPath, Using = "//*[@id='btnSelectTo']")]
@@ -47,10 +44,10 @@ namespace T2automation.Pages.MyMessages
         [FindsBy(How = How.XPath, Using = "//*[@id='txtSearch2Temp']")]
         private IWebElement _searchNameCode;
 
-        [FindsBy(How = How.XPath, Using = ".//*[@id='searchGrid2Temp']/tbody/tr/td[1]/label")]
+        [FindsBy(How = How.XPath, Using = ".//tbody/tr/td[1]/label")]
         private IList<IWebElement> _selectToCheck;
 
-        [FindsBy(How = How.XPath, Using = ".//*[@id='searchGrid2Temp']/tbody/tr/td[2]")]
+        [FindsBy(How = How.XPath, Using = ".//tbody/tr/td[2]")]
         private IList<IWebElement> _selectToName;
 
         [FindsBy(How = How.XPath, Using = "//*[@id='btnSelectToTemp']")]
@@ -110,8 +107,14 @@ namespace T2automation.Pages.MyMessages
         [FindsBy(How = How.Id, Using = "txtSearchExtDepToCode")]
         private IWebElement _searchDeptCodeName;
 
+        [FindsBy(How = How.Id, Using = "tabDoc")]
+        private IWebElement _documentTab;
+
         [FindsBy(How = How.Id, Using = "docContentDiv")]
         private IWebElement _contentTab;
+
+        [FindsBy(How = How.Id, Using = "docPropertyDiv")]
+        private IWebElement _propertiesTab;
 
         [FindsBy(How = How.Id, Using = "tabAttache")]
         private IWebElement _attachmentTab;
@@ -119,9 +122,81 @@ namespace T2automation.Pages.MyMessages
         [FindsBy(How = How.XPath, Using = ".//*[@id='att-head-menu']/div[1]/a/label")]
         private IWebElement _attacheBtn;
 
+        [FindsBy(How = How.XPath, Using = ".//*[@id='attachmentDelete']/a")]
+        private IWebElement _deleteBtn;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='att-head-menu']/div/a/label[text()=' Download']")]
+        private IWebElement _downloadBtn;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='att-head-menu']/div/a/label[text()=' Download All']")]
+        private IWebElement _downloadAllBtn;
+
+        [FindsBy(How = How.Id, Using = "txtIncomingMessageNumber")]
+        private IWebElement _incommingMessageNo;
+
+        [FindsBy(How = How.Id, Using = "txtSendDate2")]
+        private IWebElement _incommingHijriMessageDate;
+
+        [FindsBy(How = How.Id, Using = "txtSendDate")]
+        private IWebElement _incommingGregorianMessageDate;
+
+        [FindsBy(How = How.Id, Using = "relatedDocumentCount")]
+        private IWebElement _connectedDocTab;
+
+        [FindsBy(How = How.Id, Using = "Addbuttontbl_documentDocument")]
+        private IWebElement _addNewBtn;
+
+        [FindsBy(How = How.Id, Using = "buttontbl_documentDocument")]
+        private IWebElement _connectedDocDeleteBtn;
+
+        [FindsBy(How = How.Id, Using = "Subject")]
+        private IWebElement _connectedDocSubject;
+
+        [FindsBy(How = How.Id, Using = "btnDocumentSearch")]
+        private IWebElement _connectedDocSearchBtn;
+
+        [FindsBy(How = How.XPath, Using = "html/body/div[26]/div[2]/div/div[4]/div[2]/button[1]")]
+        private IWebElement _connectedDocSaveBtn;
+
+        private IList<IWebElement> _connectedDocSearchedSubjects()
+        {
+            return _driver.FindElements(By.XPath(".//*[@id='tbl_documentFilter']/tbody/tr/td[3]"));
+        }
+
+        private IList<IWebElement> _connectedDocSearchedCheckBoxes()
+        {
+            return _driver.FindElements(By.XPath(".//*[@id='tbl_documentFilter']/tbody/tr/td[1]/label"));
+        }
+
+        private IList<IWebElement> _progressbar(IWebDriver driver)
+        {
+            return driver.FindElements(By.XPath(".//div[@class = 'pParent']"));
+        }
+
         private IWebElement _notificationContent(IWebDriver driver)
         {
             return driver.FindElement(By.Id("not-content0"));
+        }
+
+        private IWebElement _processing(IWebDriver driver)
+        {
+            return driver.FindElement(By.ClassName("dataTables_processing"));
+        }
+
+        private IWebElement _mailLoading(IWebDriver driver)
+        {
+            return driver.FindElement(By.Id("container_processing"));
+        }
+
+        private IWebElement _okBtn()
+        {
+            var elements = _driver.FindElements(By.XPath(".//button[text() = 'Ok']"));
+            foreach (IWebElement elem in elements) {
+                if (elem.Displayed) {
+                    return elem;
+                }
+            }
+            return _driver.FindElement(By.XPath(".//button[text() = 'Ok']"));
         }
 
         private SelectElement _receiverType(IWebDriver driver) {
@@ -143,6 +218,11 @@ namespace T2automation.Pages.MyMessages
             return new SelectElement(_driver.FindElement(By.Id("slctDeliveryType")));
         }
 
+        private SelectElement _securityLevel()
+        {
+            return new SelectElement(_driver.FindElement(By.Id("slctSecurityLevels")));
+        }
+
         private IList<IWebElement> _deptRadioBtn(IWebDriver driver)
         {
             return driver.FindElements(By.XPath(".//*[@id='externalDepartmentToGrid']/tbody/tr/td[1]/input"));
@@ -151,6 +231,20 @@ namespace T2automation.Pages.MyMessages
         private IList<IWebElement> _deptNames(IWebDriver driver)
         {
             return driver.FindElements(By.XPath(".//*[@id='externalDepartmentToGrid']/tbody/tr/td[2]"));
+        }
+
+        private IList<IWebElement> _attachedFileNames(IWebDriver driver)
+        {
+            return driver.FindElements(By.XPath(".//*[@id='files-parent']/div/div[2]"));
+        }
+
+        private IList<IWebElement> _attachedFilesCheckboxes(IWebDriver driver)
+        {
+            return driver.FindElements(By.XPath(".//*[@id='files-parent']/div/div[1]/label"));
+        }
+
+        private IList<IWebElement> _daysOnCal() {
+            return _driver.FindElements(By.XPath("html/body/div/div/div[2]/div/table/tbody/tr/td/a[text()=.]"));
         }
 
         public string title = "Inbox - Ole5.1";
@@ -243,7 +337,7 @@ namespace T2automation.Pages.MyMessages
         public void EnterPassword(IWebDriver driver, string password)
         {
             SendKeys(driver, _passwordInput, password);
-            Click(driver, _okBtn);
+            Click(driver, _okBtn());
         }
 
         public void ClickToButton(IWebDriver driver)
@@ -265,7 +359,7 @@ namespace T2automation.Pages.MyMessages
         }
 
         public void SelectToUser(IWebDriver driver, string user) {
-            Thread.Sleep(1000);
+            WaitTillProcessing();
             for (int index = 0; index < _selectToName.Count; index++) {
                 if (GetText(driver, _selectToName.ElementAt(index)).Contains(user)) {
                     Click(driver, _selectToCheck.ElementAt(index));
@@ -277,7 +371,7 @@ namespace T2automation.Pages.MyMessages
         }
 
         public void ClickOkBtn() {
-            Click(_driver, _okBtn);
+            Click(_driver, _okBtn());
             Thread.Sleep(1000);
         }
 
@@ -288,26 +382,26 @@ namespace T2automation.Pages.MyMessages
             Thread.Sleep(1000);
         }
 
-        public void SendMail(string subject, string contentBody, bool checkPopup = false, int multipleAttachementNo = 1, string multipleAttachmentType = "") {
-            ComposeMail(subject, contentBody);
-            if (!multipleAttachmentType.Equals(""))
+        public void clickOnSendBtn(bool checkPopup=false) {
+            Click(_driver, _sendBtn);
+            Thread.Sleep(2000);
+            if (checkPopup)
             {
-                if (multipleAttachmentType.Contains(","))
+                foreach (IWebElement cancelBtn in _cancelBtn)
                 {
-                    string[] types = multipleAttachmentType.Split(',');
-                    foreach (string type in types)
+                    if (cancelBtn.Displayed)
                     {
-                        AddAttachments(type);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < multipleAttachementNo; i++)
-                    {
-                        AddAttachments(multipleAttachmentType);
+                        Click(_driver, cancelBtn);
+                        break;
                     }
                 }
             }
+        }
+
+        public void SendMail(string subject, string contentBody, bool checkPopup = false, int multipleAttachementNo = 1, string multipleAttachmentType = "", string securityLevel = "") {
+            ComposeMail(subject, contentBody);
+            AddAttachments(multipleAttachmentType, multipleAttachementNo);
+            SetProperties(securityLevel: securityLevel);
             Click(_driver, _sendBtn);
             Thread.Sleep(2000);
             if (checkPopup) {
@@ -323,6 +417,7 @@ namespace T2automation.Pages.MyMessages
 
         public bool OpenMail(IWebDriver driver, string subject, string encryptPass = "")
         {
+            WaitTillMailsGetLoad();
             foreach (IWebElement elem in _subjectList)
             {
                 if (GetText(driver, elem).Equals(subject))
@@ -373,14 +468,39 @@ namespace T2automation.Pages.MyMessages
             return false;
         }
 
-        public void WaitTillMailSent()
+        public bool WaitTillMailSent()
         {
             try {
                 WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(60));
                 wait.Until(drv => ElementIsDisplayed(_driver, _notificationContent(_driver)));
+                return true;
             }
             catch (Exception) {
                 Console.WriteLine("Notification on sending email does not appear");
+                return false;
+            }
+        }
+
+        public void WaitTillProcessing()
+        {
+            try
+            {
+                while (ElementIsDisplayed(_driver, _processing(_driver)))
+                {
+                    continue;
+                }
+                Thread.Sleep(5000);
+            }
+            catch (Exception) {
+                return;
+            }
+        }
+
+        public void WaitTillMailsGetLoad()
+        {
+            while (ElementIsDisplayed(_driver, _mailLoading(_driver)))
+            {
+                continue;
             }
         }
 
@@ -415,11 +535,11 @@ namespace T2automation.Pages.MyMessages
                 Thread.Sleep(5000);
                 Click(_driver, _deptRadioBtn(_driver).ElementAt(index));
                 Thread.Sleep(2000);
-                Click(_driver, _okBtn);
+                Click(_driver, _okBtn());
                 Thread.Sleep(2000);
                 return true;
             }
-            Click(_driver, _okBtn);
+            Click(_driver, _okBtn());
             return false;
         }
 
@@ -428,9 +548,35 @@ namespace T2automation.Pages.MyMessages
             EnterContentBody(contentBody);
         }
 
-        public void SetProperties(string deliveryType = "")
+        public void SetProperties(string deliveryType = "", string securityLevel = "", string messageNo = "", string messageHijriDate = "", string messageGreorianDate = "")
         {
-            DropdownSelectByText(_driver, _deliveryType(), deliveryType);
+            Click(_driver, _documentTab);
+            Click(_driver, _propertiesTab);
+            if (!deliveryType.Equals(""))
+            {
+                DropdownSelectByText(_driver, _deliveryType(), deliveryType);
+            }
+
+            if (!securityLevel.Equals("")) {
+                DropdownSelectByText(_driver, _securityLevel(), securityLevel);
+            }
+
+            if (!messageNo.Equals(""))
+            {
+                SendKeys(_driver, _incommingMessageNo, messageNo);
+            }
+
+            if (!messageGreorianDate.Equals(""))
+            {
+                SendKeys(_driver, _incommingGregorianMessageDate, new DateTimeHelper().GetDate(messageGreorianDate));
+                var result = _daysOnCal();
+                Click(_driver, _daysOnCal().ElementAt(new DateTimeHelper().GetDay(messageGreorianDate) - 1));
+            }
+
+            if (!messageHijriDate.Equals(""))
+            {
+                SendKeys(_driver, _incommingHijriMessageDate, messageHijriDate);
+            }
         }
 
         public void SendOutgoingMessage(string subject, string contentBody, string deliveryType = "", string deptName = "", string deptCode = "", string type = "") {
@@ -442,15 +588,182 @@ namespace T2automation.Pages.MyMessages
             SendMail(subject, contentBody, checkPopup: true);
         }
 
-        public void AddAttachments(string multipleAttachmentType) {
+        public void WaitForUploading()
+        {
+            Thread.Sleep(1000);
+            while (_progressbar(_driver).Count != 0 )
+            {
+                bool stillUploading = false;
+                var progress = _progressbar(_driver);
+                foreach (IWebElement progressbar in progress) {
+                    if (ElementIsDisplayed(_driver, progressbar)) {
+                        stillUploading = true;
+                        break;
+                    }
+                }
+                if (!stillUploading) {
+                    return;
+                }
+            }
+        }
+
+        public void AddAttachments(string multipleAttachmentType, int multipleAttachementNo) {
+            if (!multipleAttachmentType.Equals(""))
+            {
+                if (multipleAttachmentType.Contains(","))
+                {
+                    string[] types = multipleAttachmentType.Split(',');
+                    foreach (string type in types)
+                    {
+                        Click(_driver, _attachmentTab);
+                        Click(_driver, _attacheBtn);
+                        AutoItX3 autoIt = new AutoItX3();
+                        autoIt.WinActivate("Open");
+                        readFromConfig = new ReadFromConfig();
+                        var filePath = readFromConfig.GetValue("AttachementFolder") + type;
+                        autoIt.Send(filePath);
+                        autoIt.Send("{ENTER}");
+                        WaitForUploading();
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < multipleAttachementNo; i++)
+                    {
+                        Click(_driver, _attachmentTab);
+                        Click(_driver, _attacheBtn);
+                        AutoItX3 autoIt = new AutoItX3();
+                        autoIt.WinActivate("Open");
+                        readFromConfig = new ReadFromConfig();
+                        var filePath = readFromConfig.GetValue("AttachementFolder") + multipleAttachmentType;
+                        autoIt.Send(filePath);
+                        autoIt.Send("{ENTER}");
+                        WaitForUploading();
+                    }
+                }
+            }
+        }
+
+        public void DeleteAttachments(string deleteAttachmentTypes, int deleteAttachmentNo)
+        {
+            if (!deleteAttachmentTypes.Equals(""))
+            {
+                var fileNames = _attachedFileNames(_driver);
+                var checkBoxes = _attachedFilesCheckboxes(_driver);
+                if (deleteAttachmentTypes.Contains(","))
+                {
+                    string[] types = deleteAttachmentTypes.Split(',');
+                    foreach (string type in types)
+                    {
+                        for (int index = 0; index < fileNames.Count; index++) {
+                            if (GetAttribute(_driver, fileNames.ElementAt(index), "title").Equals(type)) {
+                                Click(_driver, checkBoxes.ElementAt(index));
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < deleteAttachmentNo; i++)
+                    {
+                        if (GetAttribute(_driver, fileNames.ElementAt(i), "title").Equals(deleteAttachmentTypes))
+                        {
+                            Click(_driver, checkBoxes.ElementAt(i));
+                        }
+                    }
+                }
+                Click(_driver, _deleteBtn);
+            }
+        }
+
+        public bool ValidateAttachments(IWebDriver driver, int attachmentNo, string attachment, int deleteAttachmentNo = 0)
+        {
+            var fileNames = _attachedFileNames(_driver);
+            if (fileNames.Count == attachmentNo-deleteAttachmentNo)
+            {
+                for (int index = 0; index < attachmentNo - deleteAttachmentNo; index++)
+                {
+                    if (!attachment.Contains(GetAttribute(driver, fileNames.ElementAt(index), "title")))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public void DownloadFile(string subject, string downloadFileName, int downloadFileNo)
+        {
+            OpenMail(_driver, subject);
             Click(_driver, _attachmentTab);
-            Click(_driver, _attacheBtn);
-            AutoItX3 autoIt = new AutoItX3();
-            autoIt.WinActivate("Open");
-            readFromConfig = new ReadFromConfig();
-            var filePath = readFromConfig.GetValue("AttachementFolder") + multipleAttachmentType;
-            autoIt.Send(filePath);
-            autoIt.Send("{ENTER}");
+            if (!(downloadFileName.Equals("All") && downloadFileName.Equals("")))
+            {
+                var fileNames = _attachedFileNames(_driver);
+                var checkBoxes = _attachedFilesCheckboxes(_driver);
+                if (downloadFileName.Contains(","))
+                {
+                    string[] types = downloadFileName.Split(',');
+                    foreach (string type in types)
+                    {
+                        for (int index = 0; index < fileNames.Count; index++)
+                        {
+                            if (GetAttribute(_driver, fileNames.ElementAt(index), "title").Equals(type))
+                            {
+                                Click(_driver, checkBoxes.ElementAt(index));
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < downloadFileNo; i++)
+                    {
+                        if (GetAttribute(_driver, fileNames.ElementAt(i), "title").Equals(downloadFileName))
+                        {
+                            Click(_driver, checkBoxes.ElementAt(i));
+                        }
+                    }
+                }
+                Click(_driver, _downloadBtn);
+            }
+            else if (downloadFileName.Equals("All")) {
+                Click(_driver, _downloadAllBtn);
+            }
+        }
+
+        public void SelectConnectedDoc(string subject) {
+            Click(_driver, _connectedDocTab);
+            Click(_driver, _addNewBtn);
+            SendKeys(_driver, _connectedDocSubject, subject);
+            Click(_driver, _connectedDocSearchBtn);
+            WaitTillProcessing();
+            if (_connectedDocSearchedSubjects().Count > 1) {
+                Click(_driver, _connectedDocSearchedCheckBoxes().ElementAt(0));
+            }
+            Click(_driver, _connectedDocSaveBtn);
+        }
+
+        public bool CheckVisibiltyOnConnectedDoc(string buttonName, bool value) {
+            if (buttonName.Equals("Add")) {
+                return ElementIsDisplayed(_driver, _addNewBtn) == value;
+            }
+            else if (buttonName.Equals("Delete"))
+            {
+                return ElementIsDisplayed(_driver, _connectedDocDeleteBtn) == value;
+            }
+            return false;
+        }
+
+        public bool CheckVisibiltyOfTab(string tab, bool value)
+        {
+            if (tab.Equals("Connected Tab"))
+            {
+                return ElementIsDisplayed(_driver, _connectedDocTab) == value;
+            }
+            return false;
         }
     }
 }

@@ -36,6 +36,9 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
         [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/span/a[text() = 'Message Permission']/../span[1]")]
         private IWebElement _expandMessagePermission;
 
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']//a[text() = 'View Related Messages']/../span[1]")]
+        private IWebElement _expandViewRelatedMessagePermission;
+
         [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li/span")]
         private IList<IWebElement> _systemMessagePermissionsClass;
 
@@ -44,6 +47,24 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
 
         [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li/span/span[2]")]
         private IList<IWebElement> _selectSystemMessagePermissions;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li[2]/ul/li/span")]
+        private IList<IWebElement> _viewRelatedMessagePermissionsClass;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li[2]/ul/li/span/a")]
+        private IList<IWebElement> _viewRelatedMessagePermissions;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li[3]/ul/li[2]/ul/li/span/span[2]")]
+        private IList<IWebElement> _viewRelatedMessagePermissionsCheckbox;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/ul/li[2]/ul/li[1]/ul/li/span")]
+        private IList<IWebElement> _deptViewRelatedMessagePermissionsClass;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/ul/li[2]/ul/li[1]/ul/li/span/a")]
+        private IList<IWebElement> _deptViewRelatedMessagePermissions;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/ul/li[2]/ul/li[1]/ul/li/span/span[2]")]
+        private IList<IWebElement> _deptViewRelatedMessagePermissionsCheckbox;
 
         [FindsBy(How = How.XPath, Using = ".//button[text() = 'Ok']")]
         private IWebElement _okBtn;
@@ -134,17 +155,41 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
         {
             Click(driver, _systemIncludeList);
             Click(driver, _expandMessagePermission);
-            for (int index = 0; index < _systemMessagePermissions.Count - 1; index++) {
-                if (GetText(driver, _systemMessagePermissions.ElementAt(index)).Equals(permissionName)) {
-                    if (GetAttribute(driver, _systemMessagePermissionsClass.ElementAt(index), "class").Contains("selected") != value)
+            if (permissionName.Equals("Add Related Message") || permissionName.Equals("Remove Related Messages") || permissionName.Equals("Open Related Messages"))
+            {
+                Click(driver, _expandViewRelatedMessagePermission);
+                for (int index = 0; index < _viewRelatedMessagePermissions.Count; index++)
+                {
+                    if (GetText(driver, _viewRelatedMessagePermissions.ElementAt(index)).Equals(permissionName))
                     {
-                        Click(driver, _selectSystemMessagePermissions.ElementAt(index));
-                        Click(driver, _okBtn);
-                        Click(driver, _yesBtn);
+                        if (GetAttribute(driver, _viewRelatedMessagePermissionsClass.ElementAt(index), "class").Contains("selected") != value)
+                        {
+                            Click(driver, _viewRelatedMessagePermissionsCheckbox.ElementAt(index));
+                            Click(driver, _okBtn);
+                            Click(driver, _yesBtn);
+                            return;
+                        }
+                        Click(driver, _cancelBtn);
                         return;
                     }
-                    Click(driver, _cancelBtn);
-                    return;
+                }
+            }
+            else
+            {
+                for (int index = 0; index < _systemMessagePermissions.Count; index++)
+                {
+                    if (GetText(driver, _systemMessagePermissions.ElementAt(index)).Equals(permissionName))
+                    {
+                        if (GetAttribute(driver, _systemMessagePermissionsClass.ElementAt(index), "class").Contains("selected") != value)
+                        {
+                            Click(driver, _selectSystemMessagePermissions.ElementAt(index));
+                            Click(driver, _okBtn);
+                            Click(driver, _yesBtn);
+                            return;
+                        }
+                        Click(driver, _cancelBtn);
+                        return;
+                    }
                 }
             }
         }
@@ -159,19 +204,43 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
                     Click(driver, _includeList.ElementAt(index));
                     Click(driver, _expandDepartmant);
                     Click(driver, _expandDeptMessagingPermissions);
-                    for (int index1 = 0; index1 < _deptMessagePermissions.Count; index1++)
+
+                    if (permissionName.Equals("Add Related Message") || permissionName.Equals("Remove Related Messages") || permissionName.Equals("Open Related Messages"))
                     {
-                        if (GetText(driver, _deptMessagePermissions.ElementAt(index1)).Equals(permissionName))
+                        Click(driver, _expandViewRelatedMessagePermission);
+                        for (int index1 = 0; index1 < _deptViewRelatedMessagePermissions.Count; index++)
                         {
-                            if (GetAttribute(driver, _deptMessagePermissionsClass.ElementAt(index1), "class").Contains("selected") != value)
+                            if (GetText(driver, _deptViewRelatedMessagePermissions.ElementAt(index1)).Equals(permissionName))
                             {
-                                Click(driver, _selectDeptMessagePermissions.ElementAt(index1));
-                                Click(driver, _okBtn);
-                                Click(driver, _yesBtn);
+                                if (GetAttribute(driver, _deptViewRelatedMessagePermissionsClass.ElementAt(index1), "class").Contains("selected") != value)
+                                {
+                                    Click(driver, _deptViewRelatedMessagePermissionsCheckbox.ElementAt(index1));
+                                    Click(driver, _okBtn);
+                                    Click(driver, _yesBtn);
+                                    return;
+                                }
+                                Click(driver, _cancelBtn);
                                 return;
                             }
-                            Click(driver, _cancelBtn);
-                            return;
+                        }
+                    }
+
+                    else
+                    {
+                        for (int index1 = 0; index1 < _deptMessagePermissions.Count; index1++)
+                        {
+                            if (GetText(driver, _deptMessagePermissions.ElementAt(index1)).Equals(permissionName))
+                            {
+                                if (GetAttribute(driver, _deptMessagePermissionsClass.ElementAt(index1), "class").Contains("selected") != value)
+                                {
+                                    Click(driver, _selectDeptMessagePermissions.ElementAt(index1));
+                                    Click(driver, _okBtn);
+                                    Click(driver, _yesBtn);
+                                    return;
+                                }
+                                Click(driver, _cancelBtn);
+                                return;
+                            }
                         }
                     }
                 }

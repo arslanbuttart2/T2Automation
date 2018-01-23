@@ -65,14 +65,14 @@ namespace T2automation.Scenarios.Permissions
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("User permissions on system")]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Internal Message", "True", "arslan", "UserName", "Password", "Internal Document", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Internal Message", "False", "arslan", "UserName", "Password", "Internal Document", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Encrypted Message", "True", "arslan", "UserName", "Password", "Encrypted internal message", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Encrypted Message", "False", "arslan", "UserName", "Password", "Encrypted internal message", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Incoming Message", "True", "arslan", "UserName", "Password", "Incoming Document", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Incoming Message", "False", "arslan", "UserName", "Password", "Incoming Document", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Outing Message", "True", "arslan", "UserName", "Password", "Outgoing Document", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Outing Message", "False", "arslan", "UserName", "Password", "Outgoing Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Internal Message", "True", "User", "UserName", "Password", "Internal Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Internal Message", "False", "User", "UserName", "Password", "Internal Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Encrypted Message", "True", "User", "UserName", "Password", "Encrypted internal message", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Encrypted Message", "False", "User", "UserName", "Password", "Encrypted internal message", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Incoming Message", "True", "User", "UserName", "Password", "Incoming Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Incoming Message", "False", "User", "UserName", "Password", "Incoming Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Outing Message", "True", "User", "UserName", "Password", "Outgoing Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Outing Message", "False", "User", "UserName", "Password", "Outgoing Document", null)]
         public virtual void UserPermissionsOnSystem(string adminUserName, string adminPassword, string permissionName, string permissionValue, string user, string userName, string password, string button, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User permissions on system", exampleTags);
@@ -92,12 +92,12 @@ namespace T2automation.Scenarios.Permissions
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("User permissions on Department")]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Internal Message", "True", "arslan", "internalDepartmentSameDep", "UserName", "Password", "Internal Document", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Internal Message", "False", "arslan", "internalDepartmentSameDep", "UserName", "Password", "Internal Document", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Incoming Message", "True", "arslan", "internalDepartmentSameDep", "UserName", "Password", "Incoming Document", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Incoming Message", "False", "arslan", "internalDepartmentSameDep", "UserName", "Password", "Incoming Document", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Outing Message", "True", "arslan", "internalDepartmentSameDep", "UserName", "Password", "Outgoing Document", null)]
-        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Outing Message", "False", "arslan", "internalDepartmentSameDep", "UserName", "Password", "Outgoing Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Internal Message", "True", "User", "internalDepartmentSameDep", "UserName", "Password", "Internal Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Internal Message", "False", "User", "internalDepartmentSameDep", "UserName", "Password", "Internal Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Incoming Message", "True", "User", "internalDepartmentSameDep", "UserName", "Password", "Incoming Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Incoming Message", "False", "User", "internalDepartmentSameDep", "UserName", "Password", "Incoming Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Outing Message", "True", "User", "internalDepartmentSameDep", "UserName", "Password", "Outgoing Document", null)]
+        [NUnit.Framework.TestCaseAttribute("AdminUserName", "AdminPassword", "Create Outing Message", "False", "User", "internalDepartmentSameDep", "UserName", "Password", "Outgoing Document", null)]
         public virtual void UserPermissionsOnDepartment(string adminUserName, string adminPassword, string permissionName, string permissionValue, string user, string dept, string userName, string password, string button, string[] exampleTags)
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("User permissions on Department", exampleTags);

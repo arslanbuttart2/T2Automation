@@ -9,6 +9,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Edge;
+using System.IO;
 
 namespace T2automation.Init
 {
@@ -42,7 +43,11 @@ namespace T2automation.Init
 
             else if (browserType.Equals("chrome") || browserType.Equals("ch"))
             {
-                driver = new ChromeDriver();
+                Array.ForEach(Directory.GetFiles(@"C:\Users\ahaider\source\repos\T2Automation\T2automation\Downloads"), File.Delete);
+                var chromeOptions = new ChromeOptions();
+                chromeOptions.AddUserProfilePreference("download.default_directory", @"C:\Users\ahaider\source\repos\T2Automation\T2automation\Downloads");
+                chromeOptions.AddUserProfilePreference("disable-popup-blocking", "true");
+                driver = new ChromeDriver(chromeOptions);
             }
 
             else if (browserType.Equals("Internet Explorer") || browserType.Equals("ie"))

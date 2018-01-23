@@ -35,8 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
@@ -93,6 +93,9 @@
     <Compile Include="Steps\Messages\MessageActionsSteps.cs" />
     <Compile Include="Steps\Messages\SendMessagesStepDef.cs" />
     <Compile Include="Steps\Permissions\PermissionsStepDef.cs" />
+    <Compile Include="Util\DateTimeHelper.cs" />
+    <Compile Include="Util\GetDownloadFiles.cs" />
+    <Compile Include="Util\RandomData.cs" />
     <Compile Include="Util\ReadFromConfig.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +143,7 @@
     <Content Include="Lib\1.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Downloads\" />
     <Folder Include="Pages\SystemManagement\LookUps\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -76,6 +76,7 @@ namespace T2automation.Pages.MyMessages
 
         public bool OpenMail(IWebDriver driver, string subject, string encryptPass = "")
         {
+            Thread.Sleep(3000);
             foreach (IWebElement elem in _subjectList)
             {
                 if (GetText(driver, elem).Equals(subject))

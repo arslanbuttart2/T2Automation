@@ -9,14 +9,14 @@ Feature: Permissions of user
 
     Examples:
       | adminUserName | adminPassword | permissionName | permissionValue | user | userName | password | button |
-      | AdminUserName | AdminPassword | Create Internal Message | True | arslan | UserName | Password | Internal Document |
-      | AdminUserName | AdminPassword | Create Internal Message | False | arslan | UserName | Password | Internal Document |
-	  | AdminUserName | AdminPassword | Create Encrypted Message | True | arslan | UserName | Password | Encrypted internal message |
-	  | AdminUserName | AdminPassword | Create Encrypted Message | False | arslan | UserName | Password | Encrypted internal message  |
-	  | AdminUserName | AdminPassword | Create Incoming Message | True | arslan | UserName | Password | Incoming Document  |
-	  | AdminUserName | AdminPassword | Create Incoming Message | False | arslan | UserName | Password | Incoming Document  |
-	  | AdminUserName | AdminPassword | Create Outing Message | True | arslan | UserName | Password | Outgoing Document  |
-	  | AdminUserName | AdminPassword | Create Outing Message | False | arslan | UserName | Password | Outgoing Document  |
+      | AdminUserName | AdminPassword | Create Internal Message | True | User | UserName | Password | Internal Document |
+      | AdminUserName | AdminPassword | Create Internal Message | False | User | UserName | Password | Internal Document |
+	  | AdminUserName | AdminPassword | Create Encrypted Message | True | User | UserName | Password | Encrypted internal message |
+	  | AdminUserName | AdminPassword | Create Encrypted Message | False | User | UserName | Password | Encrypted internal message  |
+	  | AdminUserName | AdminPassword | Create Incoming Message | True | User | UserName | Password | Incoming Document  |
+	  | AdminUserName | AdminPassword | Create Incoming Message | False | User | UserName | Password | Incoming Document  |
+	  | AdminUserName | AdminPassword | Create Outing Message | True | User | UserName | Password | Outgoing Document  |
+	  | AdminUserName | AdminPassword | Create Outing Message | False | User | UserName | Password | Outgoing Document  |
 
   Scenario Outline: User permissions on Department
     Given Admin logged in "<adminUserName>" "<adminPassword>"
@@ -26,9 +26,9 @@ Feature: Permissions of user
 
     Examples:
       | adminUserName | adminPassword | permissionName			| permissionValue | user   | dept					   | userName | password | button			 |
-      | AdminUserName | AdminPassword | Create Internal Message | True			  | arslan | internalDepartmentSameDep | UserName | Password | Internal Document |
-      | AdminUserName | AdminPassword | Create Internal Message | False			  | arslan | internalDepartmentSameDep | UserName | Password | Internal Document |
-	  | AdminUserName | AdminPassword | Create Incoming Message | True			  | arslan | internalDepartmentSameDep | UserName | Password | Incoming Document |
-	  | AdminUserName | AdminPassword | Create Incoming Message | False			  | arslan | internalDepartmentSameDep | UserName | Password | Incoming Document |
-	  | AdminUserName | AdminPassword | Create Outing Message	| True			  | arslan | internalDepartmentSameDep | UserName | Password | Outgoing Document |
-	  | AdminUserName | AdminPassword | Create Outing Message	| False			  | arslan | internalDepartmentSameDep | UserName | Password | Outgoing Document |
+      | AdminUserName | AdminPassword | Create Internal Message | True			  | User | internalDepartmentSameDep | UserName | Password | Internal Document |
+      | AdminUserName | AdminPassword | Create Internal Message | False			  | User | internalDepartmentSameDep | UserName | Password | Internal Document |
+	  | AdminUserName | AdminPassword | Create Incoming Message | True			  | User | internalDepartmentSameDep | UserName | Password | Incoming Document |
+	  | AdminUserName | AdminPassword | Create Incoming Message | False			  | User | internalDepartmentSameDep | UserName | Password | Incoming Document |
+	  | AdminUserName | AdminPassword | Create Outing Message	| True			  | User | internalDepartmentSameDep | UserName | Password | Outgoing Document |
+	  | AdminUserName | AdminPassword | Create Outing Message	| False			  | User | internalDepartmentSameDep | UserName | Password | Outgoing Document |

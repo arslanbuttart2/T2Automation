@@ -76,7 +76,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 5
  testRunner.When(string.Format("user sends an internal message to \"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\"", level, receiverType, to, subject, content), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 6
- testRunner.Then(string.Format("mail should appear in my message out box \"{0}\" \"{1}\" \"{2}\" \"\"", to, subject, content), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("mail should appear in my message out box \"{0}\" \"{1}\" \"{2}\" \"\" \"\"", to, subject, content), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 7
  testRunner.When(string.Format("User logs in \"{0}\" \"{1}\"", userName, password), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 8
@@ -120,7 +120,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 27
  testRunner.When(string.Format("user sends an incoming message to \"{0}\" \"{1}\" \"{2}\" \"{3}\" \"{4}\"", level, receiverType, to, subject, content), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 28
- testRunner.Then(string.Format("mail should appear in my message out box \"{0}\" \"{1}\" \"{2}\"", to, subject, content), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("mail should appear in my message out box \"{0}\" \"{1}\" \"{2}\" \"\" \"\"", to, subject, content), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 29
  testRunner.When(string.Format("User logs in \"{0}\" \"{1}\"", userName, password), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 30
@@ -142,7 +142,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 38
  testRunner.When(string.Format("user sends an outgoing message to \"{0}\" \"{1}\" \"{2}\" \"{3}\"", name, subject, content, deliveryType), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 39
- testRunner.Then(string.Format("mail should appear in my message out box \"{0}\" \"{1}\" \"{2}\" \"\"", commDept, subject, content), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("mail should appear in my message out box \"{0}\" \"{1}\" \"{2}\" \"\" \"\"", commDept, subject, content), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 40
  testRunner.Then(string.Format("mail should appear in Department Message with Root \"{0}\" \"{1}\" \"{2}\"", commDept, subject, content), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden

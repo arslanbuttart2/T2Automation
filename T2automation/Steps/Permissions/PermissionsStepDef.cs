@@ -47,7 +47,7 @@ namespace T2automation
             userManagerPage.NavigateToUserManager(driver);
             Assert.IsTrue(userManagerPage.IsAt(driver, userManagerPage.title));
 
-            permissionsPage = userManagerPage.OpenPermissions(driver, user);
+            permissionsPage = userManagerPage.OpenPermissions(driver, new ReadFromConfig().GetValue(user));
             permissionsPage.IncludeSystemMessagePermissions(driver, permissionName, value);
         }
 
@@ -81,7 +81,7 @@ namespace T2automation
             userManagerPage.NavigateToUserManager(driver);
             Assert.IsTrue(userManagerPage.IsAt(driver, userManagerPage.title));
 
-            permissionsPage = userManagerPage.OpenPermissions(driver, user);
+            permissionsPage = userManagerPage.OpenPermissions(driver, new ReadFromConfig().GetValue(user));
             permissionsPage.IncludeDeptMessagePermissions(driver, readFromConfig.GetDeptName(dept), permissionName, value);
         }
 
