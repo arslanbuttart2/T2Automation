@@ -38,6 +38,9 @@ namespace T2automation.Pages.MyMessages
         [FindsBy(How = How.XPath, Using = ".//button[text() = 'Cancel']")]
         private IList<IWebElement> _cancelBtn;
 
+        [FindsBy(How = How.XPath, Using = ".//button[text() = 'Yes']")]
+        private IWebElement _yesBtn;
+
         [FindsBy(How = How.XPath, Using = "//*[@id='btnSelectTo']")]
         private IWebElement _toButton;
 
@@ -157,6 +160,15 @@ namespace T2automation.Pages.MyMessages
 
         [FindsBy(How = How.XPath, Using = "html/body/div[26]/div[2]/div/div[4]/div[2]/button[1]")]
         private IWebElement _connectedDocSaveBtn;
+
+        [FindsBy(How = How.CssSelector, Using = ".fa.fa-mail-reply")]
+        private IWebElement _replyBtn;     
+
+        [FindsBy(How = How.CssSelector, Using = ".fa.fa-forward")]
+        private IWebElement _forwardBtn;
+
+        [FindsBy(How = How.XPath, Using = ".//*[@id='main-parent']/div/div[2]/div[2]/div[4]/div[1]/div[3]/a/label")]
+        private IWebElement _deleteDraftBtn;
 
         private IList<IWebElement> _connectedDocSearchedSubjects()
         {
@@ -747,6 +759,7 @@ namespace T2automation.Pages.MyMessages
         }
 
         public bool CheckVisibiltyOnConnectedDoc(string buttonName, bool value) {
+            Click(_driver, _connectedDocTab);
             if (buttonName.Equals("Add")) {
                 return ElementIsDisplayed(_driver, _addNewBtn) == value;
             }
@@ -759,11 +772,30 @@ namespace T2automation.Pages.MyMessages
 
         public bool CheckVisibiltyOfTab(string tab, bool value)
         {
-            if (tab.Equals("Connected Tab"))
+            if (tab.Equals("Connected Document"))
             {
                 return ElementIsDisplayed(_driver, _connectedDocTab) == value;
             }
             return false;
+        }
+
+        public void ClickOnReply()
+        {
+            Click(_driver, _replyBtn);
+            Thread.Sleep(5000);
+        }
+
+        public void ClickOnForward()
+        {
+            Click(_driver, _forwardBtn);
+            Thread.Sleep(5000);
+        }
+
+        public void DeleteDraft()
+        {
+            Thread.Sleep(5000);
+            Click(_driver, _deleteDraftBtn);
+            Click(_driver, _yesBtn);
         }
     }
 }

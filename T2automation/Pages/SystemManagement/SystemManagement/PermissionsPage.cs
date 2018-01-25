@@ -60,9 +60,6 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
         [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/ul/li[2]/ul/li[1]/ul/li/span")]
         private IList<IWebElement> _deptViewRelatedMessagePermissionsClass;
 
-        [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/ul/li[2]/ul/li[1]/ul/li/span/a")]
-        private IList<IWebElement> _deptViewRelatedMessagePermissions;
-
         [FindsBy(How = How.XPath, Using = ".//*[@id='divPermTree']/ul/li/ul/li[2]/ul/li[1]/ul/li/span/span[2]")]
         private IList<IWebElement> _deptViewRelatedMessagePermissionsCheckbox;
 
@@ -140,6 +137,11 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
             PageFactory.InitElements(_driver, this);
         }
 
+        private IList<IWebElement> _deptViewRelatedMessagePermissions()
+        {
+            return _driver.FindElements(By.XPath(".//*[@id='divPermTree']/ul/li/ul/li[2]/ul/li[1]/ul/li/span/a"));
+        }
+
         private IList<IWebElement> _deptIncludeList(IWebDriver driver)
         {
             return driver.FindElements(By.XPath(".//*[@id='userDepartmentTable']/tbody/tr/td[4]"));
@@ -208,9 +210,10 @@ namespace T2automation.Pages.SystemManagement.SystemManagement
                     if (permissionName.Equals("Add Related Message") || permissionName.Equals("Remove Related Messages") || permissionName.Equals("Open Related Messages"))
                     {
                         Click(driver, _expandViewRelatedMessagePermission);
-                        for (int index1 = 0; index1 < _deptViewRelatedMessagePermissions.Count; index++)
+                        var elem = _deptViewRelatedMessagePermissions();
+                        for (int index1 = 0; index1 < elem.Count; index1++)
                         {
-                            if (GetText(driver, _deptViewRelatedMessagePermissions.ElementAt(index1)).Equals(permissionName))
+                            if (GetText(driver, elem.ElementAt(index1)).Equals(permissionName))
                             {
                                 if (GetAttribute(driver, _deptViewRelatedMessagePermissionsClass.ElementAt(index1), "class").Contains("selected") != value)
                                 {

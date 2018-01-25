@@ -270,7 +270,35 @@ namespace T2automation.Steps.Messages
         [Then(@"the visibilty of tab ""(.*)"" should be ""(.*)"" on connected doc tab")]
         public void ThenTheVisibiltyOfTabShouldBeOnConnectedDocTab(string tab, bool value)
         {
-            Assert.IsTrue(inboxPage.CheckVisibiltyOfTab(tab, value), tab + " should not be visible");
+            Assert.True(inboxPage.CheckVisibiltyOfTab(tab, value), tab + " visibilty should be " + value.ToString());
+        }
+
+        [When(@"user opens department ""(.*)"" mail with subject ""(.*)""")]
+        public void WhenUserOpensDepartmentMailWithSubject(string dept, string subject)
+        {
+            driver = driverFactory.GetDriver();
+            deptMessageInboxPage = new Pages.DeptMessages.InboxPage(driver);
+            deptMessageInboxPage.NavigateToQADeptInbox(driver);
+            inboxPage = new InboxPage(driver);
+            inboxPage.OpenMail(driver, subject);
+        }
+
+        [When(@"user click on reply button")]
+        public void WhenUserClickOnReplyButton()
+        {
+            inboxPage.ClickOnReply();
+        }
+
+        [When(@"user deletes the draft")]
+        public void WhenUserDeletesTheDraft()
+        {
+            inboxPage.DeleteDraft();
+        }
+
+        [When(@"user click on forward button")]
+        public void WhenUserClickOnForwardButton()
+        {
+            inboxPage.ClickOnForward();
         }
 
     }

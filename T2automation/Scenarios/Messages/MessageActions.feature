@@ -200,18 +200,22 @@ Scenario: Message - View connected document - with permission -  department mail
 	When Admin set department message permissions for user "Open Related Messages" "False" "User" "internalDepartmentSameDep"
 	When Admin set department message permissions for user "Can Reply" "True" "User" "internalDepartmentSameDep"
 	And User logs in "UserName" "Password"
-	And user opens inbox email with subject "Internal Message with Connected Documents 111"
+	And user opens department "internalDepartmentSameDep" mail with subject "Internal Message with Connected Documents 111"
+	And user click on reply button
 	Then the visibilty of tab "Connected Document" should be "True" on connected doc tab
 	Then the visibilty of button "Add" should be "False" on connected doc tab
 	And the visibilty of button "Delete" should be "False" on connected doc tab
+	When user deletes the draft
 
 Scenario: Message - View connected document - without permission -  department mail
 	When Admin set department message permissions for user "View Related Messages" "False" "User" "internalDepartmentSameDep"
 	When Admin set department message permissions for user "Can Reply" "False" "User" "internalDepartmentSameDep"
 	When Admin set department message permissions for user "Can Forward" "True" "User" "internalDepartmentSameDep"
 	And User logs in "UserName" "Password"
-	And user opens inbox email with subject "Internal Message with Connected Documents 111"
+	And user opens department "internalDepartmentSameDep" mail with subject "Internal Message with Connected Documents 111"
+	And user click on forward button
 	Then the visibilty of tab "Connected Document" should be "False" on connected doc tab
+	When user deletes the draft
 
 Scenario: Message - add connected document - with permission -  personal mail
 	When Admin set system message permissions for user "View Related Messages" "True" "User"
